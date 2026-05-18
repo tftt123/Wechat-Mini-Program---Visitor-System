@@ -20,6 +20,14 @@ exports.main = async (event, context) => {
         return await itemCheck(visitId, userInfo, itemCheckData)
       case 'checkOut':
         return await checkOut(visitId, userInfo)
+      case 'update':
+        return await updateVisit(visitId, userInfo, event.updateData)
+      case 'cancel':
+        return await cancelVisit(visitId, userInfo)
+      case 'updateEscort':
+        return await updateEscort(visitId, userInfo, event.escortData)
+      case 'checkOut':
+        return await checkOut(visitId, userInfo, event.badgeReturned)
       default:
         return { code: -1, msg: '未知操作' }
     }
@@ -118,9 +126,13 @@ async function getDetail(visitId) {
       employeeId: v.employeeId,
       employeeName: v.employeeName,
       department: v.department,
+      escortName: v.escortName,
+      badgeType: v.badgeType,
       status: v.status,
       itemsCarried: v.itemsCarried,
       itemDescription: v.itemDescription,
+      itemPhotos: v.itemPhotos || [],
+      badgeReturned: v.badgeReturned || false,
       checkedInAt: v.checkedInAt,
       checkedOutAt: v.checkedOutAt,
       createdAt: v.createdAt,
@@ -209,13 +221,14 @@ async function itemCheck(visitId, userInfo, itemCheckData) {
   }
 
   const now = new Date()
-  const { itemsCarried, itemDescription } = itemCheckData || {}
+  const { itemsCarried, itemDescription, itemPhotos } = itemCheckData || {}
 
   await db.collection('visits').doc(visitId).update({
     data: {
       status: 'item_checked',
       itemsCarried: !!itemsCarried,
       itemDescription: itemDescription || '',
+      itemPhotos: itemPhotos || [],
       updatedAt: now
     }
   })
@@ -238,7 +251,7 @@ async function itemCheck(visitId, userInfo, itemCheckData) {
 }
 
 // 门卫确认出
-async function checkOut(visitId, userInfo) {
+async function checkOut(visitId, userInfo, badgeReturned) {
   if (!visitId) return { code: -1, msg: '拜访ID不能为空' }
 
   const res = await db.collection('visits').doc(visitId).get()
@@ -251,7 +264,12 @@ async function checkOut(visitId, userInfo) {
 
   const now = new Date()
   await db.collection('visits').doc(visitId).update({
-    data: { status: 'checked_out', checkedOutAt: now, updatedAt: now }
+    data: {
+      status: 'checked_out',
+      checkedOutAt: now,
+      badgeReturned: !!badgeReturned,
+      updatedAt: now
+    }
   })
 
   await db.collection('visit_logs').add({
@@ -260,11 +278,119 @@ async function checkOut(visitId, userInfo) {
       action: 'check_out',
       operatorRole: 'security',
       operatorName: userInfo.name,
+      badgeReturned: !!badgeReturned,
       createdAt: now
     }
   })
 
   return { code: 0, msg: '出厂确认成功，访客可以离开' }
+}
+
+// 修改拜访信息（仅待确认/待访客填表状态）
+async function updateVisit(visitId, userInfo, updateData) {
+  if (!visitId) return { code: -1, msg: '拜访ID不能为空' }
+
+  const res = await db.collection('visits').doc(visitId).get()
+  if (!res.data) return { code: -1, msg: '拜访记录不存在' }
+
+  const visit = res.data
+  if (!['pending', 'awaiting_visitor'].includes(visit.status)) {
+    return { code: -1, msg: '当前状态不允许修改' }
+  }
+  if (visit.employeeId !== userInfo.userId) {
+    return { code: -1, msg: '只能修改自己创建的拜访记录' }
+  }
+
+  const now = new Date()
+  const updateFields = {}
+  if (updateData.visitDate !== undefined) updateFields.visitDate = updateData.visitDate
+  if (updateData.visitTime !== undefined) updateFields.visitTime = updateData.visitTime
+  if (updateData.purpose !== undefined) updateFields.purpose = updateData.purpose.trim()
+  updateFields.updatedAt = now
+
+  await db.collection('visits').doc(visitId).update({ data: updateFields })
+
+  await db.collection('visit_logs').add({
+    data: {
+      visitId,
+      action: 'update',
+      operatorRole: 'employee',
+      operatorName: userInfo.name,
+      createdAt: now
+    }
+  })
+
+  return { code: 0, msg: '修改成功' }
+}
+
+// 作废拜访记录
+async function cancelVisit(visitId, userInfo) {
+  if (!visitId) return { code: -1, msg: '拜访ID不能为空' }
+
+  const res = await db.collection('visits').doc(visitId).get()
+  if (!res.data) return { code: -1, msg: '拜访记录不存在' }
+
+  const visit = res.data
+  if (!['pending', 'awaiting_visitor'].includes(visit.status)) {
+    return { code: -1, msg: '当前状态不允许作废' }
+  }
+  if (visit.employeeId !== userInfo.userId) {
+    return { code: -1, msg: '只能作废自己创建的拜访记录' }
+  }
+
+  const now = new Date()
+  await db.collection('visits').doc(visitId).update({
+    data: { status: 'cancelled', updatedAt: now }
+  })
+
+  await db.collection('visit_logs').add({
+    data: {
+      visitId,
+      action: 'cancel',
+      operatorRole: 'employee',
+      operatorName: userInfo.name,
+      createdAt: now
+    }
+  })
+
+  return { code: 0, msg: '已作废' }
+}
+
+// 门卫编辑带领人信息
+async function updateEscort(visitId, userInfo, escortData) {
+  if (!visitId) return { code: -1, msg: '拜访ID不能为空' }
+  if (userInfo.role !== 'security') {
+    return { code: -1, msg: '无权限操作' }
+  }
+
+  const res = await db.collection('visits').doc(visitId).get()
+  if (!res.data) return { code: -1, msg: '拜访记录不存在' }
+
+  const visit = res.data
+  if (!['confirmed', 'checked_in', 'item_checked'].includes(visit.status)) {
+    return { code: -1, msg: '当前状态不允许编辑带领人信息' }
+  }
+
+  const now = new Date()
+  await db.collection('visits').doc(visitId).update({
+    data: {
+      escortName: (escortData.escortName || '').trim(),
+      badgeType: escortData.badgeType || '',
+      updatedAt: now
+    }
+  })
+
+  await db.collection('visit_logs').add({
+    data: {
+      visitId,
+      action: 'update_escort',
+      operatorRole: 'security',
+      operatorName: userInfo.name,
+      createdAt: now
+    }
+  })
+
+  return { code: 0, msg: '保存成功' }
 }
 
 // 辅助：创建通知

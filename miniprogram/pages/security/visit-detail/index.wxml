@@ -25,18 +25,67 @@
         <view class="detail-row"><text class="row-label">部门</text><text class="row-value">{{detail.department || '未填写'}}</text></view>
       </view>
 
+      <view class="detail-section">
+        <view class="section-title">带领人信息</view>
+        <view class="edit-row">
+          <text class="row-label">带领人</text>
+          <input class="escort-input" placeholder="请输入带领人姓名" value="{{escortForm.escortName}}" data-field="escortName" bindinput="onEscortInput" />
+        </view>
+        <view class="edit-row">
+          <text class="row-label">工牌类型</text>
+          <picker class="escort-picker" value="{{badgeTypes.indexOf(escortForm.badgeType)}}" range="{{badgeTypes}}" bindchange="onBadgeTypeChange">
+            <view class="picker-value" style="color:{{escortForm.badgeType ? '#333' : '#999'}}">{{escortForm.badgeType || '请选择'}}</view>
+          </picker>
+        </view>
+      </view>
+
+      <view class="detail-section" wx:if="{{detail.checkedOutAtStr}}">
+        <view class="section-title">出厂记录</view>
+        <view class="detail-row"><text class="row-label">出厂时间</text><text class="row-value">{{detail.checkedOutAtStr}}</text></view>
+        <view class="detail-row"><text class="row-label">回收工牌</text><text class="row-value">{{detail.badgeReturned ? '是' : '否'}}</text></view>
+      </view>
+
       <view class="detail-section" wx:if="{{detail.itemsCarried !== null}}">
         <view class="section-title">物品确认</view>
         <view class="detail-row"><text class="row-label">携带物品</text><text class="row-value">{{detail.itemsCarried ? '是' : '否'}}</text></view>
         <view class="detail-row" wx:if="{{detail.itemDescription}}"><text class="row-label">物品说明</text><text class="row-value">{{detail.itemDescription}}</text></view>
+        <view class="photo-preview-grid" wx:if="{{detail.itemPhotos && detail.itemPhotos.length > 0}}">
+          <view class="photo-preview-item" wx:for="{{detail.itemPhotos}}" wx:key="*this">
+            <image src="{{item}}" mode="aspectFill" />
+          </view>
+        </view>
       </view>
     </view>
 
     <button wx:if="{{canCheckIn}}" class="btn btn-success" bindtap="checkIn">确认入厂</button>
-    <button wx:if="{{canCheckOut}}" class="btn btn-primary" bindtap="checkOut">确认出厂</button>
+    <button wx:if="{{canCheckOut}}" class="btn btn-primary" bindtap="openCheckOutModal">确认出厂</button>
 
     <view wx:if="{{!canCheckIn && !canCheckOut}}" class="text-center text-muted mt-3">
       当前状态无需操作
+    </view>
+
+    <!-- 确认出厂弹窗 -->
+    <view class="modal-mask" wx:if="{{showCheckOutModal}}" bindtap="closeCheckOutModal"></view>
+    <view class="modal-content" wx:if="{{showCheckOutModal}}">
+      <view class="modal-title">确认出厂</view>
+      <view class="modal-body">
+        <view class="modal-tip">核实物品无误，确认允许出厂？</view>
+        <view class="form-group">
+          <text class="form-label">回收工牌</text>
+          <view class="radio-group">
+            <view class="radio-item {{badgeReturned === true ? 'radio-active' : ''}}" bindtap="selectBadgeReturned" data-value="true">
+              <text>是</text>
+            </view>
+            <view class="radio-item {{badgeReturned === false ? 'radio-active' : ''}}" bindtap="selectBadgeReturned" data-value="false">
+              <text>否</text>
+            </view>
+          </view>
+        </view>
+      </view>
+      <view class="modal-footer">
+        <button class="btn btn-default" style="flex:1;margin-right:20rpx;" bindtap="closeCheckOutModal">取消</button>
+        <button class="btn btn-primary" style="flex:1;" bindtap="doCheckOut">确认</button>
+      </view>
     </view>
   </block>
 </view>

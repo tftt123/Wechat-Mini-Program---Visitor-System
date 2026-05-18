@@ -66,9 +66,12 @@ async function createInvite(employeeId, eventData) {
     employeeId: employeeId,
     employeeName: emp.name || employeeName || '',
     department: emp.department || department || '',
-    status: 'pending',
+    status: 'awaiting_visitor',
+    escortName: '',
+    badgeType: '',
     itemsCarried: null,
     itemDescription: '',
+    itemPhotos: [],
     checkedInAt: null,
     checkedOutAt: null,
     createdAt: now,
@@ -129,6 +132,8 @@ async function getByCode(inviteCode) {
       purpose: visit.purpose,
       employeeName: visit.employeeName,
       department: visit.department,
+      escortName: visit.escortName,
+      badgeType: visit.badgeType,
       status: visit.status
     }
   }
@@ -140,7 +145,7 @@ async function fillVisitorInfo(inviteCode, visitorInfo) {
     return { code: -1, msg: '参数不完整' }
   }
 
-  const { visitorName, visitorPhone, visitorCompany, visitDate, visitTime, purpose } = visitorInfo
+  const { visitorName, visitorPhone, visitorCompany, visitDate, visitTime, purpose, escortName, badgeType } = visitorInfo
   if (!visitorName || !visitorPhone) {
     return { code: -1, msg: '访客姓名和手机号不能为空' }
   }
@@ -151,7 +156,7 @@ async function fillVisitorInfo(inviteCode, visitorInfo) {
   }
 
   const visit = visitRes.data[0]
-  if (visit.status !== 'pending' || visit.visitorName !== '') {
+  if (visit.status !== 'awaiting_visitor') {
     return { code: -1, msg: '该邀请码已被使用' }
   }
 
@@ -164,6 +169,8 @@ async function fillVisitorInfo(inviteCode, visitorInfo) {
       visitDate: visitDate || visit.visitDate,
       visitTime: visitTime || visit.visitTime,
       purpose: (purpose || '').trim(),
+      escortName: (escortName || '').trim(),
+      badgeType: badgeType || '',
       status: 'pending',
       updatedAt: now
     }

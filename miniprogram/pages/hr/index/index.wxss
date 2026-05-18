@@ -8,18 +8,16 @@
 }
 
 .stats-row {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20rpx;
   margin-bottom: 30rpx;
 }
 
 .stats-card {
-  width: 48%;
   background: #fff;
   border-radius: 16rpx;
   padding: 30rpx 20rpx;
-  margin-bottom: 20rpx;
   text-align: center;
   box-shadow: 0 2rpx 12rpx rgba(0,0,0,0.06);
 }

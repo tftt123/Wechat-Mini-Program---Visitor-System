@@ -25,6 +25,12 @@
         <view class="detail-row"><text class="row-label">部门</text><text class="row-value">{{detail.department || '未填写'}}</text></view>
       </view>
 
+      <view class="detail-section">
+        <view class="section-title">带领人信息</view>
+        <view class="detail-row"><text class="row-label">带领人</text><text class="row-value">{{detail.escortName || '未填写'}}</text></view>
+        <view class="detail-row"><text class="row-label">工牌类型</text><text class="row-value">{{detail.badgeType || '未填写'}}</text></view>
+      </view>
+
       <view class="detail-section" wx:if="{{detail.checkedInAtStr}}">
         <view class="section-title">入厂记录</view>
         <view class="detail-row"><text class="row-label">入厂时间</text><text class="row-value">{{detail.checkedInAtStr}}</text></view>
@@ -34,11 +40,17 @@
         <view class="section-title">物品确认</view>
         <view class="detail-row"><text class="row-label">携带物品</text><text class="row-value">{{detail.itemsCarried ? '是' : '否'}}</text></view>
         <view class="detail-row" wx:if="{{detail.itemDescription}}"><text class="row-label">物品说明</text><text class="row-value">{{detail.itemDescription}}</text></view>
+        <view class="photo-preview-grid" wx:if="{{detail.itemPhotos && detail.itemPhotos.length > 0}}">
+          <view class="photo-preview-item" wx:for="{{detail.itemPhotos}}" wx:key="*this">
+            <image src="{{item}}" mode="aspectFill" />
+          </view>
+        </view>
       </view>
 
       <view class="detail-section" wx:if="{{detail.checkedOutAtStr}}">
         <view class="section-title">出厂记录</view>
         <view class="detail-row"><text class="row-label">出厂时间</text><text class="row-value">{{detail.checkedOutAtStr}}</text></view>
+        <view class="detail-row"><text class="row-label">回收工牌</text><text class="row-value">{{detail.badgeReturned ? '是' : '否'}}</text></view>
       </view>
     </view>
   </block>

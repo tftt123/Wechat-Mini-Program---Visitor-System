@@ -61,7 +61,7 @@
       </view>
       <view class="form-group">
         <text class="form-label">角色</text>
-        <picker value="{{['employee','hr','security'].indexOf(regForm.role)}}" range="{{['员工','人事','门卫']}}" data-field="role" bindchange="onRegInput">
+        <picker value="{{['employee','hr','security'].indexOf(regForm.role)}}" range="{{['员工','人事','门卫']}}" bindchange="onRoleChange">
           <view class="form-input picker-value">{{regForm.role === 'employee' ? '员工' : regForm.role === 'hr' ? '人事' : '门卫'}}</view>
         </picker>
       </view>

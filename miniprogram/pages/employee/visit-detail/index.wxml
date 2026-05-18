@@ -35,11 +35,17 @@
         <view class="section-title">物品确认</view>
         <view class="detail-row"><text class="row-label">携带物品</text><text class="row-value">{{detail.itemsCarried ? '是' : '否'}}</text></view>
         <view class="detail-row" wx:if="{{detail.itemDescription}}"><text class="row-label">物品说明</text><text class="row-value">{{detail.itemDescription}}</text></view>
+        <view class="photo-preview-grid" wx:if="{{detail.itemPhotos && detail.itemPhotos.length > 0}}">
+          <view class="photo-preview-item" wx:for="{{detail.itemPhotos}}" wx:key="*this">
+            <image src="{{item}}" mode="aspectFill" />
+          </view>
+        </view>
       </view>
 
       <view class="detail-section" wx:if="{{detail.checkedOutAtStr}}">
         <view class="section-title">出厂记录</view>
         <view class="detail-row"><text class="row-label">出厂时间</text><text class="row-value">{{detail.checkedOutAtStr}}</text></view>
+        <view class="detail-row"><text class="row-label">回收工牌</text><text class="row-value">{{detail.badgeReturned ? '是' : '否'}}</text></view>
       </view>
 
       <view class="detail-section" wx:if="{{detail.logs.length > 0}}">
@@ -53,9 +59,71 @@
 
     <button wx:if="{{canConfirm}}" class="btn btn-primary" bindtap="confirmVisit">确认拜访</button>
 
+    <view wx:if="{{canEdit || canCancel}}" class="btn-group">
+      <button wx:if="{{canEdit}}" class="btn btn-outline" bindtap="showEdit">编辑信息</button>
+      <button wx:if="{{canCancel}}" class="btn btn-default mt-2" bindtap="doCancel">作废记录</button>
+    </view>
+
     <view wx:if="{{canItemCheck}}" class="btn-group">
-      <button class="btn btn-success" bindtap="itemCheck" data-type="no">不携带物品</button>
-      <button class="btn btn-danger mt-2" bindtap="itemCheck" data-type="yes">携带物品</button>
+      <button class="btn btn-success" bindtap="itemCheckNo">不携带物品</button>
+      <button class="btn btn-danger mt-2" bindtap="showItemModal">携带物品</button>
+    </view>
+
+    <!-- 物品确认弹窗 -->
+    <view class="modal-mask" wx:if="{{showItemModal}}" bindtap="closeItemModal"></view>
+    <view class="modal-content" wx:if="{{showItemModal}}">
+      <view class="modal-title">物品确认</view>
+      <view class="modal-body">
+        <view class="form-group">
+          <text class="form-label">物品说明 *</text>
+          <textarea class="form-input" style="height:160rpx;padding:20rpx;" placeholder="请填写物品说明和携带事由" value="{{itemForm.description}}" bindinput="onItemDescInput" />
+        </view>
+        <view class="form-group">
+          <text class="form-label">物品照片 *（至少1张）</text>
+          <view class="photo-grid">
+            <view class="photo-item" wx:for="{{itemForm.photos}}" wx:key="*this">
+              <image class="photo-img" src="{{item}}" mode="aspectFill" />
+              <view class="photo-remove" bindtap="removePhoto" data-index="{{index}}">×</view>
+            </view>
+            <view class="photo-add" bindtap="choosePhoto" wx:if="{{itemForm.photos.length < 6}}">
+              <text class="photo-add-icon">+</text>
+              <text class="photo-add-text">拍照</text>
+            </view>
+          </view>
+        </view>
+      </view>
+      <view class="modal-footer">
+        <button class="btn btn-default" style="flex:1;margin-right:20rpx;" bindtap="closeItemModal">取消</button>
+        <button class="btn btn-primary" style="flex:1;" bindtap="submitItemCheck">确认</button>
+      </view>
+    </view>
+
+    <!-- 编辑弹窗 -->
+    <view class="modal-mask" wx:if="{{showEditModal}}" bindtap="closeEdit"></view>
+    <view class="modal-content" wx:if="{{showEditModal}}">
+      <view class="modal-title">编辑拜访信息</view>
+      <view class="modal-body">
+        <view class="form-group">
+          <text class="form-label">来访日期 *</text>
+          <picker mode="date" value="{{editForm.visitDate}}" data-field="visitDate" bindchange="onEditInput">
+            <view class="form-input picker-value">{{editForm.visitDate || '请选择'}}</view>
+          </picker>
+        </view>
+        <view class="form-group">
+          <text class="form-label">来访时间 *</text>
+          <picker mode="time" value="{{editForm.visitTime}}" data-field="visitTime" bindchange="onEditInput">
+            <view class="form-input picker-value">{{editForm.visitTime || '请选择'}}</view>
+          </picker>
+        </view>
+        <view class="form-group">
+          <text class="form-label">来访目的 *</text>
+          <input class="form-input" placeholder="请输入来访目的" value="{{editForm.purpose}}" data-field="purpose" bindinput="onEditInput" />
+        </view>
+      </view>
+      <view class="modal-footer">
+        <button class="btn btn-default" style="flex:1;margin-right:20rpx;" bindtap="closeEdit">取消</button>
+        <button class="btn btn-primary" style="flex:1;" bindtap="doUpdate">保存</button>
+      </view>
     </view>
   </block>
 </view>

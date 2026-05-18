@@ -36,8 +36,8 @@ Page({
       if (res.code === 0) {
         const all = res.data
         const today = getToday()
-        const pending = all.filter(v => v.status === 'pending')
-        const todayList = all.filter(v => v.visitDate === today && v.status !== 'checked_out')
+        const pending = all.filter(v => v.status === 'pending' || v.status === 'awaiting_visitor')
+        const todayList = all.filter(v => v.visitDate === today && !['checked_out', 'cancelled'].includes(v.status))
 
         this.setData({
           stats: {

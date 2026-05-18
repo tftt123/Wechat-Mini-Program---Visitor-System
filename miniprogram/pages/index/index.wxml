@@ -1,7 +1,7 @@
 <view class="visitor-landing">
   <view class="header-section">
-    <view class="icon-wrapper">
-      <text class="iconfont scan-icon">📷</text>
+    <view class="logo-wrapper">
+      <image class="logo-img" src="/images/spxlogo.png" mode="aspectFit" />
     </view>
     <view class="title">访客登记系统</view>
     <view class="subtitle">请扫描门卫处二维码进入</view>

@@ -5,13 +5,16 @@ Page({
   data: {
     inviteCode: '',
     visitInfo: null,
+    badgeTypes: ['类型1', '类型2', '类型3'],
     form: {
       visitorName: '',
       visitorPhone: '',
       visitorCompany: '',
       visitDate: getToday(),
       visitTime: '',
-      purpose: ''
+      purpose: '',
+      escortName: '',
+      badgeType: ''
     }
   },
 
@@ -41,7 +44,9 @@ Page({
             visitorCompany: res.data.visitorCompany || '',
             visitDate: res.data.visitDate || getToday(),
             visitTime: res.data.visitTime || '',
-            purpose: res.data.purpose || ''
+            purpose: res.data.purpose || '',
+            escortName: res.data.escortName || '',
+            badgeType: res.data.badgeType || ''
           }
         })
       } else {
@@ -61,6 +66,11 @@ Page({
     this.setData({
       [`form.${field}`]: e.detail.value
     })
+  },
+
+  onBadgeTypeChange(e) {
+    const types = this.data.badgeTypes
+    this.setData({ 'form.badgeType': types[e.detail.value] })
   },
 
   // 提交表单

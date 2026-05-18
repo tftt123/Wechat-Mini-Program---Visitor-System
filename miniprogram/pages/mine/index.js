@@ -51,6 +51,11 @@ Page({
     this.setData({ [`regForm.${field}`]: e.detail.value })
   },
 
+  onRoleChange(e) {
+    const roles = ['employee', 'hr', 'security']
+    this.setData({ 'regForm.role': roles[e.detail.value] })
+  },
+
   // 登录
   async doLogin() {
     const { loginPhone } = this.data

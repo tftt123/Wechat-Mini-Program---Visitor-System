@@ -36,7 +36,10 @@ module.exports = {
   confirmVisit: (visitId, userInfo) => callCloudFunction('visits', { action: 'confirm', visitId, userInfo }),
   checkIn: (visitId, userInfo) => callCloudFunction('visits', { action: 'checkIn', visitId, userInfo }),
   itemCheck: (visitId, userInfo, itemCheckData) => callCloudFunction('visits', { action: 'itemCheck', visitId, userInfo, itemCheckData }),
-  checkOut: (visitId, userInfo) => callCloudFunction('visits', { action: 'checkOut', visitId, userInfo }),
+  checkOut: (visitId, userInfo, badgeReturned) => callCloudFunction('visits', { action: 'checkOut', visitId, userInfo, badgeReturned }),
+  updateVisit: (visitId, userInfo, updateData) => callCloudFunction('visits', { action: 'update', visitId, userInfo, updateData }),
+  cancelVisit: (visitId, userInfo) => callCloudFunction('visits', { action: 'cancel', visitId, userInfo }),
+  updateEscort: (visitId, userInfo, escortData) => callCloudFunction('visits', { action: 'updateEscort', visitId, userInfo, escortData }),
 
   // 通知
   getNotifications: (userId) => callCloudFunction('notifications', { action: 'list', userId }),

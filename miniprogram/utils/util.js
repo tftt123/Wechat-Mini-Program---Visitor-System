@@ -30,11 +30,13 @@ function getToday() {
 
 // 状态映射
 const STATUS_MAP = {
+  'awaiting_visitor': { text: '待访客填表', class: 'status-awaiting' },
   'pending': { text: '待确认', class: 'status-pending' },
   'confirmed': { text: '已确认', class: 'status-confirmed' },
   'checked_in': { text: '已入厂', class: 'status-checked-in' },
   'item_checked': { text: '待出厂', class: 'status-item-checked' },
-  'checked_out': { text: '已出厂', class: 'status-checked-out' }
+  'checked_out': { text: '已出厂', class: 'status-checked-out' },
+  'cancelled': { text: '已作废', class: 'status-cancelled' }
 }
 
 function getStatusInfo(status) {
