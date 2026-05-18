@@ -1,0 +1,107 @@
+.mine-page {
+  min-height: 100vh;
+  background: #f5f5f5;
+}
+
+.header-section {
+  background: linear-gradient(135deg, #1976d2, #42a5f5);
+  padding: 80rpx 40rpx 60rpx;
+  text-align: center;
+  color: #fff;
+}
+
+.avatar {
+  width: 120rpx;
+  height: 120rpx;
+  background: rgba(255,255,255,0.3);
+  border-radius: 50%;
+  margin: 0 auto 24rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.avatar-text {
+  font-size: 48rpx;
+  font-weight: 600;
+}
+
+.user-name {
+  font-size: 40rpx;
+  font-weight: 600;
+  margin-bottom: 12rpx;
+}
+
+.user-role {
+  font-size: 28rpx;
+  opacity: 0.9;
+}
+
+.menu-card {
+  margin: 30rpx;
+  padding: 0;
+  overflow: hidden;
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  padding: 30rpx;
+  background: #fff;
+}
+
+.menu-icon {
+  font-size: 40rpx;
+  margin-right: 20rpx;
+  width: 60rpx;
+  text-align: center;
+}
+
+.menu-text {
+  flex: 1;
+  font-size: 30rpx;
+  color: #333;
+}
+
+.menu-arrow {
+  font-size: 36rpx;
+  color: #ccc;
+}
+
+/* 弹窗 */
+.modal-mask {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 100;
+}
+
+.modal-content {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80%;
+  background: #fff;
+  border-radius: 20rpx;
+  z-index: 101;
+  padding: 40rpx;
+}
+
+.modal-title {
+  font-size: 36rpx;
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 30rpx;
+}
+
+.modal-body {
+  margin-bottom: 30rpx;
+}
+
+.modal-footer {
+  display: flex;
+}

@@ -1,0 +1,30 @@
+.result-card {
+  text-align: center;
+  padding: 60rpx 40rpx;
+}
+
+.result-title {
+  font-size: 32rpx;
+  color: #666;
+  margin-bottom: 30rpx;
+}
+
+.result-code {
+  font-size: 80rpx;
+  font-weight: 700;
+  color: #1976d2;
+  letter-spacing: 16rpx;
+  margin-bottom: 30rpx;
+}
+
+.result-tip {
+  font-size: 26rpx;
+  color: #999;
+  margin-bottom: 40rpx;
+}
+
+.result-info {
+  font-size: 28rpx;
+  color: #666;
+  margin-bottom: 12rpx;
+}

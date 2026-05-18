@@ -1,0 +1,69 @@
+<view class="container">
+  <!-- 统计卡片 -->
+  <view class="stats-row">
+    <view class="stats-card" bindtap="switchTab" data-tab="pending">
+      <view class="stats-num">{{stats.pending}}</view>
+      <view class="stats-label">待确认</view>
+    </view>
+    <view class="stats-card">
+      <view class="stats-num">{{stats.today}}</view>
+      <view class="stats-label">今日来访</view>
+    </view>
+    <view class="stats-card">
+      <view class="stats-num">{{stats.total}}</view>
+      <view class="stats-label">全部记录</view>
+    </view>
+  </view>
+
+  <!-- 生成邀请码按钮 -->
+  <button class="btn btn-primary btn-generate" bindtap="goToInviteCode">
+    + 生成邀请码
+  </button>
+
+  <!-- Tab切换 -->
+  <view class="tab-bar">
+    <view class="tab-item {{currentTab === 'pending' ? 'active' : ''}}" bindtap="switchTab" data-tab="pending">
+      待确认
+      <text wx:if="{{stats.pending > 0}}" class="tab-badge">{{stats.pending}}</text>
+    </view>
+    <view class="tab-item {{currentTab === 'today' ? 'active' : ''}}" bindtap="switchTab" data-tab="today">
+      今日来访
+    </view>
+  </view>
+
+  <!-- 待确认列表 -->
+  <view class="list" wx:if="{{currentTab === 'pending'}}">
+    <view class="visit-item card" wx:for="{{pendingList}}" wx:key="visitId" bindtap="goToDetail" data-id="{{item.visitId}}">
+      <view class="item-header">
+        <text class="item-name">{{item.visitorName || '未填写姓名'}}</text>
+        <text class="status-tag {{item.statusInfo.class}}">{{item.statusInfo.text}}</text>
+      </view>
+      <view class="item-info">
+        <text class="item-phone">{{item.visitorPhone || '未填写电话'}}</text>
+      </view>
+      <view class="item-info">
+        <text>{{item.visitDate}} {{item.visitTime}}</text>
+      </view>
+      <view class="item-purpose" wx:if="{{item.purpose}}">目的：{{item.purpose}}</view>
+    </view>
+    <view class="empty-state" wx:if="{{pendingList.length === 0}}">
+      <view class="empty-state-text">暂无待确认拜访</view>
+    </view>
+  </view>
+
+  <!-- 今日来访列表 -->
+  <view class="list" wx:if="{{currentTab === 'today'}}">
+    <view class="visit-item card" wx:for="{{todayList}}" wx:key="visitId" bindtap="goToDetail" data-id="{{item.visitId}}">
+      <view class="item-header">
+        <text class="item-name">{{item.visitorName || '未填写姓名'}}</text>
+        <text class="status-tag {{item.statusInfo.class}}">{{item.statusInfo.text}}</text>
+      </view>
+      <view class="item-info">
+        <text>{{item.visitTime}} · {{item.purpose || '无目的'}}</text>
+      </view>
+    </view>
+    <view class="empty-state" wx:if="{{todayList.length === 0}}">
+      <view class="empty-state-text">今日暂无来访</view>
+    </view>
+  </view>
+</view>

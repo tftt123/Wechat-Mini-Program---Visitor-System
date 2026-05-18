@@ -1,0 +1,53 @@
+<view class="container">
+  <view class="page-title">拜访记录统计</view>
+
+  <view class="stats-row">
+    <view class="stats-card">
+      <view class="stats-num">{{stats.total}}</view>
+      <view class="stats-label">全部记录</view>
+    </view>
+    <view class="stats-card">
+      <view class="stats-num">{{stats.today}}</view>
+      <view class="stats-label">今日来访</view>
+    </view>
+    <view class="stats-card">
+      <view class="stats-num">{{stats.checkedIn}}</view>
+      <view class="stats-label">在厂中</view>
+    </view>
+    <view class="stats-card">
+      <view class="stats-num">{{stats.checkedOut}}</view>
+      <view class="stats-label">已离厂</view>
+    </view>
+  </view>
+
+  <view class="card filter-card">
+    <view class="form-group">
+      <text class="form-label">日期筛选</text>
+      <picker mode="date" value="{{filterDate}}" bindchange="onDateChange">
+        <view class="form-input picker-value">{{filterDate || '全部日期'}}</view>
+      </picker>
+    </view>
+    <view class="form-group">
+      <text class="form-label">被访人姓名</text>
+      <view class="filter-row">
+        <input class="form-input" style="flex:1;margin-right:20rpx;" placeholder="输入姓名搜索" value="{{filterEmployeeName}}" bindinput="onNameInput" />
+        <button class="btn btn-primary btn-sm" bindtap="searchByName">搜索</button>
+      </view>
+    </view>
+  </view>
+
+  <view class="list">
+    <view class="visit-item card" wx:for="{{visits}}" wx:key="visitId" bindtap="goToDetail" data-id="{{item.visitId}}">
+      <view class="item-header">
+        <text class="item-name">{{item.visitorName}}</text>
+        <text class="status-tag {{item.statusInfo.class}}">{{item.statusInfo.text}}</text>
+      </view>
+      <view class="item-info">被访人：{{item.employeeName}} {{item.department}}</view>
+      <view class="item-info">{{item.visitDate}} {{item.visitTime}} · {{item.purpose}}</view>
+      <view class="item-info">手机：{{item.visitorPhone}}</view>
+    </view>
+    <view class="empty-state" wx:if="{{visits.length === 0}}">
+      <view class="empty-state-text">暂无拜访记录</view>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,73 @@
+<view class="container">
+  <view class="page-title">今日来访管理</view>
+
+  <view class="tab-bar">
+    <view class="tab-item {{currentTab === 'toCheckIn' ? 'active' : ''}}" bindtap="switchTab" data-tab="toCheckIn">
+      待入厂
+      <text wx:if="{{toCheckIn.length > 0}}" class="tab-badge">{{toCheckIn.length}}</text>
+    </view>
+    <view class="tab-item {{currentTab === 'checkedIn' ? 'active' : ''}}" bindtap="switchTab" data-tab="checkedIn">已入厂</view>
+    <view class="tab-item {{currentTab === 'toCheckOut' ? 'active' : ''}}" bindtap="switchTab" data-tab="toCheckOut">
+      待出厂
+      <text wx:if="{{toCheckOut.length > 0}}" class="tab-badge">{{toCheckOut.length}}</text>
+    </view>
+    <view class="tab-item {{currentTab === 'checkedOut' ? 'active' : ''}}" bindtap="switchTab" data-tab="checkedOut">已出厂</view>
+  </view>
+
+  <view class="list" wx:if="{{currentTab === 'toCheckIn'}}">
+    <view class="visit-item card" wx:for="{{toCheckIn}}" wx:key="visitId" bindtap="goToDetail" data-id="{{item.visitId}}">
+      <view class="item-header">
+        <text class="item-name">{{item.visitorName}}</text>
+        <text class="status-tag {{item.statusInfo.class}}">{{item.statusInfo.text}}</text>
+      </view>
+      <view class="item-info">被访人：{{item.employeeName}} {{item.department}}</view>
+      <view class="item-info">{{item.visitTime}} · {{item.purpose}}</view>
+      <view class="item-info">手机：{{item.visitorPhone}}</view>
+    </view>
+    <view class="empty-state" wx:if="{{toCheckIn.length === 0}}">
+      <view class="empty-state-text">暂无待入厂访客</view>
+    </view>
+  </view>
+
+  <view class="list" wx:if="{{currentTab === 'checkedIn'}}">
+    <view class="visit-item card" wx:for="{{checkedIn}}" wx:key="visitId" bindtap="goToDetail" data-id="{{item.visitId}}">
+      <view class="item-header">
+        <text class="item-name">{{item.visitorName}}</text>
+        <text class="status-tag {{item.statusInfo.class}}">{{item.statusInfo.text}}</text>
+      </view>
+      <view class="item-info">被访人：{{item.employeeName}}</view>
+      <view class="item-info">入厂时间：{{item.checkedInAt ? item.checkedInAt.split('T')[1].substring(0,5) : ''}}</view>
+    </view>
+    <view class="empty-state" wx:if="{{checkedIn.length === 0}}">
+      <view class="empty-state-text">暂无在厂访客</view>
+    </view>
+  </view>
+
+  <view class="list" wx:if="{{currentTab === 'toCheckOut'}}">
+    <view class="visit-item card" wx:for="{{toCheckOut}}" wx:key="visitId" bindtap="goToDetail" data-id="{{item.visitId}}">
+      <view class="item-header">
+        <text class="item-name">{{item.visitorName}}</text>
+        <text class="status-tag {{item.statusInfo.class}}">{{item.statusInfo.text}}</text>
+      </view>
+      <view class="item-info">被访人：{{item.employeeName}}</view>
+      <view class="item-info" wx:if="{{item.itemsCarried}}">携带物品：{{item.itemDescription || '未说明'}}</view>
+      <view class="item-info" wx:else>未携带物品</view>
+    </view>
+    <view class="empty-state" wx:if="{{toCheckOut.length === 0}}">
+      <view class="empty-state-text">暂无待出厂访客</view>
+    </view>
+  </view>
+
+  <view class="list" wx:if="{{currentTab === 'checkedOut'}}">
+    <view class="visit-item card" wx:for="{{checkedOut}}" wx:key="visitId" bindtap="goToDetail" data-id="{{item.visitId}}">
+      <view class="item-header">
+        <text class="item-name">{{item.visitorName}}</text>
+        <text class="status-tag {{item.statusInfo.class}}">{{item.statusInfo.text}}</text>
+      </view>
+      <view class="item-info">被访人：{{item.employeeName}}</view>
+    </view>
+    <view class="empty-state" wx:if="{{checkedOut.length === 0}}">
+      <view class="empty-state-text">今日无已出厂访客</view>
+    </view>
+  </view>
+</view>

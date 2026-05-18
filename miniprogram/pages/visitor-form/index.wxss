@@ -1,0 +1,47 @@
+.info-card {
+  background: linear-gradient(135deg, #1976d2, #42a5f5);
+  color: #fff;
+}
+
+.info-title {
+  font-size: 32rpx;
+  font-weight: 600;
+  margin-bottom: 20rpx;
+}
+
+.info-row {
+  display: flex;
+  margin-bottom: 12rpx;
+  font-size: 28rpx;
+}
+
+.info-label {
+  opacity: 0.9;
+  width: 140rpx;
+}
+
+.info-value {
+  font-weight: 500;
+}
+
+.form-card {
+  margin-top: 20rpx;
+}
+
+.form-title {
+  font-size: 32rpx;
+  font-weight: 600;
+  margin-bottom: 30rpx;
+  color: #333;
+}
+
+.picker-value {
+  display: flex;
+  align-items: center;
+  color: #333;
+}
+
+.picker-value:empty,
+.picker-value:only-child {
+  color: #999;
+}

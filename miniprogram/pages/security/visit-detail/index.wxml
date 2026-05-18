@@ -1,0 +1,42 @@
+<view class="container">
+  <block wx:if="{{detail}}">
+    <view class="card detail-card">
+      <view class="detail-header">
+        <text class="detail-title">来访详情</text>
+        <text class="status-tag {{detail.statusInfo.class}}">{{detail.statusInfo.text}}</text>
+      </view>
+
+      <view class="detail-section">
+        <view class="section-title">访客信息</view>
+        <view class="detail-row"><text class="row-label">姓名</text><text class="row-value">{{detail.visitorName}}</text></view>
+        <view class="detail-row"><text class="row-label">手机号</text><text class="row-value">{{detail.visitorPhone}}</text></view>
+        <view class="detail-row"><text class="row-label">公司</text><text class="row-value">{{detail.visitorCompany || '未填写'}}</text></view>
+      </view>
+
+      <view class="detail-section">
+        <view class="section-title">拜访信息</view>
+        <view class="detail-row"><text class="row-label">日期时间</text><text class="row-value">{{detail.visitDate}} {{detail.visitTime}}</text></view>
+        <view class="detail-row"><text class="row-label">来访目的</text><text class="row-value">{{detail.purpose}}</text></view>
+      </view>
+
+      <view class="detail-section">
+        <view class="section-title">被访人信息</view>
+        <view class="detail-row"><text class="row-label">姓名</text><text class="row-value">{{detail.employeeName}}</text></view>
+        <view class="detail-row"><text class="row-label">部门</text><text class="row-value">{{detail.department || '未填写'}}</text></view>
+      </view>
+
+      <view class="detail-section" wx:if="{{detail.itemsCarried !== null}}">
+        <view class="section-title">物品确认</view>
+        <view class="detail-row"><text class="row-label">携带物品</text><text class="row-value">{{detail.itemsCarried ? '是' : '否'}}</text></view>
+        <view class="detail-row" wx:if="{{detail.itemDescription}}"><text class="row-label">物品说明</text><text class="row-value">{{detail.itemDescription}}</text></view>
+      </view>
+    </view>
+
+    <button wx:if="{{canCheckIn}}" class="btn btn-success" bindtap="checkIn">确认入厂</button>
+    <button wx:if="{{canCheckOut}}" class="btn btn-primary" bindtap="checkOut">确认出厂</button>
+
+    <view wx:if="{{!canCheckIn && !canCheckOut}}" class="text-center text-muted mt-3">
+      当前状态无需操作
+    </view>
+  </block>
+</view>

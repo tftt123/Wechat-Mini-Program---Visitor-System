@@ -1,0 +1,60 @@
+.filter-card {
+  margin-bottom: 30rpx;
+}
+
+.filter-row {
+  display: flex;
+  align-items: center;
+}
+
+.stats-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  margin-bottom: 30rpx;
+}
+
+.stats-card {
+  width: 48%;
+  background: #fff;
+  border-radius: 16rpx;
+  padding: 30rpx 20rpx;
+  margin-bottom: 20rpx;
+  text-align: center;
+  box-shadow: 0 2rpx 12rpx rgba(0,0,0,0.06);
+}
+
+.stats-num {
+  font-size: 48rpx;
+  font-weight: 700;
+  color: #1976d2;
+  margin-bottom: 8rpx;
+}
+
+.stats-label {
+  font-size: 26rpx;
+  color: #666;
+}
+
+.visit-item {
+  margin-bottom: 20rpx;
+}
+
+.item-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16rpx;
+}
+
+.item-name {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #333;
+}
+
+.item-info {
+  font-size: 26rpx;
+  color: #666;
+  margin-bottom: 8rpx;
+}

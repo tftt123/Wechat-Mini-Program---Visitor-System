@@ -1,0 +1,53 @@
+<view class="container">
+  <view class="card info-card">
+    <view class="info-title">被访人信息</view>
+    <view class="info-row">
+      <text class="info-label">被访人：</text>
+      <text class="info-value">{{visitInfo.employeeName}}</text>
+    </view>
+    <view class="info-row">
+      <text class="info-label">部门：</text>
+      <text class="info-value">{{visitInfo.department || '未填写'}}</text>
+    </view>
+  </view>
+
+  <view class="card form-card">
+    <view class="form-title">访客信息</view>
+
+    <view class="form-group">
+      <text class="form-label">姓名 *</text>
+      <input class="form-input" placeholder="请输入您的姓名" value="{{form.visitorName}}" data-field="visitorName" bindinput="onInput" />
+    </view>
+
+    <view class="form-group">
+      <text class="form-label">手机号 *</text>
+      <input class="form-input" type="number" maxlength="11" placeholder="请输入您的手机号" value="{{form.visitorPhone}}" data-field="visitorPhone" bindinput="onInput" />
+    </view>
+
+    <view class="form-group">
+      <text class="form-label">公司名称</text>
+      <input class="form-input" placeholder="请输入公司名称" value="{{form.visitorCompany}}" data-field="visitorCompany" bindinput="onInput" />
+    </view>
+
+    <view class="form-group">
+      <text class="form-label">拜访日期 *</text>
+      <picker mode="date" value="{{form.visitDate}}" data-field="visitDate" bindchange="onInput">
+        <view class="form-input picker-value">{{form.visitDate || '请选择日期'}}</view>
+      </picker>
+    </view>
+
+    <view class="form-group">
+      <text class="form-label">拜访时间 *</text>
+      <picker mode="time" value="{{form.visitTime}}" data-field="visitTime" bindchange="onInput">
+        <view class="form-input picker-value">{{form.visitTime || '请选择时间'}}</view>
+      </picker>
+    </view>
+
+    <view class="form-group">
+      <text class="form-label">来访目的 *</text>
+      <input class="form-input" placeholder="请输入来访目的" value="{{form.purpose}}" data-field="purpose" bindinput="onInput" />
+    </view>
+  </view>
+
+  <button class="btn btn-primary" bindtap="submitForm">提交拜访申请</button>
+</view>

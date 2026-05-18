@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>访客管理系统 - 方案汇报</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: "PingFang SC", "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif;
+      background: #f0f2f5;
+      color: #333;
+      line-height: 1.8;
+    }
+    .page {
+      max-width: 1100px;
+      margin: 0 auto;
+      background: #fff;
+      min-height: 100vh;
+      box-shadow: 0 0 20px rgba(0,0,0,0.08);
+    }
+
+    /* 封面 */
+    .cover {
+      background: linear-gradient(135deg, #1565c0 0%, #42a5f5 100%);
+      color: #fff;
+      padding: 100px 60px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .cover::before {
+      content: "";
+      position: absolute;
+      top: -50%;
+      right: -20%;
+      width: 600px;
+      height: 600px;
+      background: rgba(255,255,255,0.06);
+      border-radius: 50%;
+    }
+    .cover::after {
+      content: "";
+      position: absolute;
+      bottom: -30%;
+      left: -10%;
+      width: 400px;
+      height: 400px;
+      background: rgba(255,255,255,0.04);
+      border-radius: 50%;
+    }
+    .cover-content { position: relative; z-index: 1; }
+    .cover-badge {
+      display: inline-block;
+      background: rgba(255,255,255,0.2);
+      padding: 6px 24px;
+      border-radius: 20px;
+      font-size: 16px;
+      margin-bottom: 30px;
+      letter-spacing: 2px;
+    }
+    .cover h1 {
+      font-size: 48px;
+      font-weight: 700;
+      margin-bottom: 20px;
+      letter-spacing: 2px;
+    }
+    .cover-subtitle {
+      font-size: 22px;
+      opacity: 0.9;
+      margin-bottom: 50px;
+    }
+    .cover-meta {
+      display: flex;
+      justify-content: center;
+      gap: 60px;
+      margin-top: 60px;
+    }
+    .cover-meta-item {
+      text-align: center;
+    }
+    .cover-meta-num {
+      font-size: 42px;
+      font-weight: 700;
+      line-height: 1;
+    }
+    .cover-meta-label {
+      font-size: 14px;
+      opacity: 0.8;
+      margin-top: 8px;
+    }
+
+    /* 内容区 */
+    .section {
+      padding: 60px;
+      border-bottom: 1px solid #f0f0f0;
+    }
+    .section:last-child { border-bottom: none; }
+    .section-title {
+      font-size: 28px;
+      font-weight: 700;
+      color: #1565c0;
+      margin-bottom: 30px;
+      padding-left: 20px;
+      border-left: 4px solid #1565c0;
+    }
+    .section-desc {
+      font-size: 16px;
+      color: #666;
+      margin-bottom: 30px;
+    }
+
+    /* 流程图 */
+    .flow-wrap {
+      margin-top: 30px;
+    }
+    .flow-step {
+      display: flex;
+      align-items: stretch;
+      margin-bottom: 0;
+    }
+    .flow-left {
+      width: 200px;
+      text-align: right;
+      padding-right: 30px;
+      position: relative;
+      flex-shrink: 0;
+    }
+    .flow-left::after {
+      content: "";
+      position: absolute;
+      right: 10px;
+      top: 8px;
+      width: 14px;
+      height: 14px;
+      background: #1565c0;
+      border-radius: 50%;
+      border: 3px solid #bbdefb;
+    }
+    .flow-line {
+      position: absolute;
+      right: 15px;
+      top: 22px;
+      bottom: -20px;
+      width: 2px;
+      background: #e3f2fd;
+    }
+    .flow-step:last-child .flow-line { display: none; }
+    .flow-role {
+      font-size: 14px;
+      color: #1565c0;
+      font-weight: 600;
+    }
+    .flow-action {
+      font-size: 14px;
+      color: #999;
+    }
+    .flow-right {
+      flex: 1;
+      background: #f8f9fa;
+      border-radius: 10px;
+      padding: 20px 24px;
+      margin-bottom: 20px;
+      border-left: 3px solid #1565c0;
+    }
+    .flow-right h4 {
+      font-size: 17px;
+      color: #333;
+      margin-bottom: 6px;
+    }
+    .flow-right p {
+      font-size: 14px;
+      color: #666;
+    }
+
+    /* 角色表格 */
+    .role-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+      font-size: 15px;
+    }
+    .role-table th {
+      background: #1565c0;
+      color: #fff;
+      padding: 14px 20px;
+      text-align: left;
+      font-weight: 600;
+    }
+    .role-table td {
+      padding: 14px 20px;
+      border-bottom: 1px solid #f0f0f0;
+    }
+    .role-table tr:hover td {
+      background: #f8f9fa;
+    }
+    .role-tag {
+      display: inline-block;
+      padding: 4px 14px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 500;
+    }
+    .tag-visitor { background: #fff3e0; color: #e65100; }
+    .tag-employee { background: #e3f2fd; color: #1565c0; }
+    .tag-security { background: #e8f5e9; color: #2e7d32; }
+    .tag-hr { background: #f3e5f5; color: #7b1fa2; }
+
+    /* 架构图 */
+    .arch-box {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 30px;
+      margin-top: 30px;
+      flex-wrap: wrap;
+    }
+    .arch-layer {
+      background: #fff;
+      border: 2px solid #e3f2fd;
+      border-radius: 12px;
+      padding: 24px 30px;
+      min-width: 200px;
+      text-align: center;
+    }
+    .arch-layer h4 {
+      font-size: 16px;
+      color: #1565c0;
+      margin-bottom: 10px;
+    }
+    .arch-layer p {
+      font-size: 13px;
+      color: #666;
+    }
+    .arch-arrow {
+      font-size: 28px;
+      color: #1565c0;
+      font-weight: 700;
+    }
+
+    /* 实施计划 */
+    .plan-list {
+      margin-top: 20px;
+    }
+    .plan-item {
+      display: flex;
+      align-items: flex-start;
+      padding: 18px 0;
+      border-bottom: 1px dashed #e0e0e0;
+    }
+    .plan-phase {
+      background: #1565c0;
+      color: #fff;
+      width: 80px;
+      height: 32px;
+      line-height: 32px;
+      text-align: center;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      flex-shrink: 0;
+      margin-right: 20px;
+    }
+    .plan-content h4 {
+      font-size: 16px;
+      color: #333;
+      margin-bottom: 4px;
+    }
+    .plan-content p {
+      font-size: 14px;
+      color: #666;
+    }
+    .plan-time {
+      margin-left: auto;
+      color: #999;
+      font-size: 14px;
+      white-space: nowrap;
+    }
+
+    /* 底部 */
+    .footer {
+      background: #263238;
+      color: #90a4ae;
+      padding: 40px 60px;
+      text-align: center;
+      font-size: 14px;
+    }
+
+    /* 打印优化 */
+    @media print {
+      body { background: #fff; }
+      .page { box-shadow: none; }
+      .section { padding: 40px; }
+      ol li { break-inside: avoid; }
+      .flow-step { break-inside: avoid; }
+      .plan-item { break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+
+    <!-- 封面 -->
+    <div class="cover">
+      <div class="cover-content">
+        <div class="cover-badge">事必得工业园</div>
+        <h1>访客管理系统</h1>
+        <div class="cover-subtitle">基于微信小程序的访客全流程数字化管理方案</div>
+        <div class="cover-meta">
+          <div class="cover-meta-item">
+            <div class="cover-meta-num">4</div>
+            <div class="cover-meta-label">角色权限</div>
+          </div>
+          <div class="cover-meta-item">
+            <div class="cover-meta-num">7</div>
+            <div class="cover-meta-label">流程节点</div>
+          </div>
+          <div class="cover-meta-item">
+            <div class="cover-meta-num">0</div>
+            <div class="cover-meta-label">硬件投入</div>
+          </div>
+          <div class="cover-meta-item">
+            <div class="cover-meta-num">10</div>
+            <div class="cover-meta-label">开发周期(天)</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 核心流程 -->
+    <div class="section">
+      <h2 class="section-title">01 &nbsp;核心业务流程</h2>
+      <p class="section-desc">访客入厂前由员工发起邀请，访客到场后扫码登记，被访人确认后门卫核验放行；离厂前需完成物品确认，门卫核实后出厂。全流程状态实时同步。</p>
+      <div class="flow-wrap">
+        <div class="flow-step">
+          <div class="flow-left">
+            <div class="flow-line"></div>
+            <div class="flow-role">员工</div>
+            <div class="flow-action">事前准备</div>
+          </div>
+          <div class="flow-right">
+            <h4>1. 生成邀请码</h4>
+            <p>被访员工在小程序填写来访日期、时间和目的，系统自动生成 6 位数字邀请码，通过其他渠道（微信/短信/电话）告知访客。</p>
+          </div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-left">
+            <div class="flow-line"></div>
+            <div class="flow-role">访客</div>
+            <div class="flow-action">现场登记</div>
+          </div>
+          <div class="flow-right">
+            <h4>2. 扫码填写信息</h4>
+            <p>访客到达门卫处，扫描墙上固定二维码进入小程序，输入邀请码，填写姓名、手机号、公司名称等个人信息并提交。</p>
+          </div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-left">
+            <div class="flow-line"></div>
+            <div class="flow-role">员工</div>
+            <div class="flow-action">审批确认</div>
+          </div>
+          <div class="flow-right">
+            <h4>3. 被访人确认拜访</h4>
+            <p>被访员工在小程序收到待确认通知，核实访客信息后点击"确认拜访"。确认后自动通知人事和门卫。</p>
+          </div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-left">
+            <div class="flow-line"></div>
+            <div class="flow-role">门卫</div>
+            <div class="flow-action">入厂核验</div>
+          </div>
+          <div class="flow-right">
+            <h4>4. 门卫确认入厂</h4>
+            <p>门卫在"待入厂"列表中查看已确认的访客记录，现场核实访客身份与系统信息一致后，点击"确认入厂"并开门放行。</p>
+          </div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-left">
+            <div class="flow-line"></div>
+            <div class="flow-role">员工 + 访客</div>
+            <div class="flow-action">拜访结束</div>
+          </div>
+          <div class="flow-right">
+            <h4>5. 物品确认</h4>
+            <p>访客离开前，被访员工带访客到门卫处，在小程序中选择"携带物品"（可填写物品说明）或"不携带物品"并确认，通知门卫。</p>
+          </div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-left">
+            <div class="flow-role">门卫</div>
+            <div class="flow-action">出厂放行</div>
+          </div>
+          <div class="flow-right">
+            <h4>6. 门卫确认出厂</h4>
+            <p>门卫在"待出厂"列表中查看物品确认记录，现场核对无误后点击"确认出厂"，访客离厂，流程闭环结束。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 角色权限 -->
+    <div class="section">
+      <h2 class="section-title">02 &nbsp;角色权限设计</h2>
+      <p class="section-desc">系统分为四个角色，各司其职，数据权限严格隔离，确保信息安全。</p>
+      <table class="role-table">
+        <thead>
+          <tr>
+            <th style="width: 120px;">角色</th>
+            <th style="width: 180px;">权限范围</th>
+            <th>具体操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="role-tag tag-visitor">访客</span></td>
+            <td>无需登录</td>
+            <td>扫码进入小程序、输入邀请码、填写个人信息、提交拜访申请</td>
+          </tr>
+          <tr>
+            <td><span class="role-tag tag-employee">被访员工</span></td>
+            <td>仅自己的拜访记录</td>
+            <td>生成邀请码、确认拜访申请、物品确认（携带/不携带）</td>
+          </tr>
+          <tr>
+            <td><span class="role-tag tag-security">门卫</span></td>
+            <td>仅当日来访记录</td>
+            <td>查看待入厂/已入厂/待出厂/已出厂列表、确认入厂、确认出厂</td>
+          </tr>
+          <tr>
+            <td><span class="role-tag tag-hr">人事</span></td>
+            <td>全部拜访记录</td>
+            <td>查看统计看板（总数/今日/在厂/离厂）、按日期/姓名筛选查询、查看详情</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- 技术方案 -->
+    <div class="section">
+      <h2 class="section-title">03 &nbsp;技术方案</h2>
+      <p class="section-desc">采用微信小程序 + 微信云开发方案，无需自建服务器，部署简单，运维成本低。</p>
+      <div class="arch-box">
+        <div class="arch-layer">
+          <h4>前端层</h4>
+          <p>微信小程序原生开发</p>
+          <p>WXML + WXSS + JS</p>
+          <p>扫码体验原生流畅</p>
+        </div>
+        <div class="arch-arrow">&#8594;</div>
+        <div class="arch-layer">
+          <h4>后端层</h4>
+          <p>微信云函数 (Node.js)</p>
+          <p>免服务器部署</p>
+          <p>免域名/免HTTPS配置</p>
+        </div>
+        <div class="arch-arrow">&#8594;</div>
+        <div class="arch-layer">
+          <h4>数据层</h4>
+          <p>云数据库 (MongoDB)</p>
+          <p>云存储 (文件/图片)</p>
+          <p>实时数据同步</p>
+        </div>
+      </div>
+      <div style="margin-top: 30px; padding: 20px; background: #f8f9fa; border-radius: 10px; font-size: 14px; color: #666;">
+        <strong style="color: #333;">方案优势：</strong>
+        无需购买服务器、无需域名备案、无需配置HTTPS、无需运维人员。微信云开发提供完整的服务器less后端能力，按量计费，成本可控。
+      </div>
+    </div>
+
+    <!-- 状态流转 -->
+    <div class="section">
+      <h2 class="section-title">04 &nbsp;状态流转设计</h2>
+      <p class="section-desc">每条拜访记录有严格的状态流转规则，防止越权操作，确保流程规范。</p>
+      <div style="display: flex; justify-content: center; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 20px; font-size: 15px;">
+        <div style="background: #fff3e0; color: #e65100; padding: 10px 20px; border-radius: 8px; font-weight: 600;">待确认</div>
+        <div style="color: #999; font-size: 20px;">&#8594;</div>
+        <div style="background: #e3f2fd; color: #1565c0; padding: 10px 20px; border-radius: 8px; font-weight: 600;">已确认</div>
+        <div style="color: #999; font-size: 20px;">&#8594;</div>
+        <div style="background: #e8f5e9; color: #2e7d32; padding: 10px 20px; border-radius: 8px; font-weight: 600;">已入厂</div>
+        <div style="color: #999; font-size: 20px;">&#8594;</div>
+        <div style="background: #f3e5f5; color: #7b1fa2; padding: 10px 20px; border-radius: 8px; font-weight: 600;">待出厂</div>
+        <div style="color: #999; font-size: 20px;">&#8594;</div>
+        <div style="background: #eceff1; color: #546e7a; padding: 10px 20px; border-radius: 8px; font-weight: 600;">已出厂</div>
+      </div>
+      <div style="margin-top: 24px; font-size: 14px; color: #666; text-align: center;">
+        状态转换由角色动作触发：员工确认 &#8594; 门卫入厂 &#8594; 员工物品确认 &#8594; 门卫出厂
+      </div>
+    </div>
+
+    <!-- 实施计划 -->
+    <div class="section">
+      <h2 class="section-title">05 &nbsp;实施计划</h2>
+      <p class="section-desc">项目采用快速迭代方式，预计 10 个工作日完成开发并进入测试阶段。</p>
+      <div class="plan-list">
+        <div class="plan-item">
+          <div class="plan-phase">Phase 1</div>
+          <div class="plan-content">
+            <h4>环境搭建 + 基础认证</h4>
+            <p>开通云开发环境、创建数据库集合、开发注册/登录云函数</p>
+          </div>
+          <div class="plan-time">1 天</div>
+        </div>
+        <div class="plan-item">
+          <div class="plan-phase">Phase 2</div>
+          <div class="plan-content">
+            <h4>员工端开发</h4>
+            <p>生成邀请码、拜访列表、确认拜访、物品确认功能</p>
+          </div>
+          <div class="plan-time">2 天</div>
+        </div>
+        <div class="plan-item">
+          <div class="plan-phase">Phase 3</div>
+          <div class="plan-content">
+            <h4>访客端开发</h4>
+            <p>扫码落地页、邀请码输入、访客信息填写表单</p>
+          </div>
+          <div class="plan-time">2 天</div>
+        </div>
+        <div class="plan-item">
+          <div class="plan-phase">Phase 4</div>
+          <div class="plan-content">
+            <h4>门卫端开发</h4>
+            <p>今日来访四状态列表、确认入厂/确认出厂操作</p>
+          </div>
+          <div class="plan-time">1.5 天</div>
+        </div>
+        <div class="plan-item">
+          <div class="plan-phase">Phase 5</div>
+          <div class="plan-content">
+            <h4>人事端开发</h4>
+            <p>统计看板、拜访记录查询、日期/姓名筛选</p>
+          </div>
+          <div class="plan-time">1.5 天</div>
+        </div>
+        <div class="plan-item">
+          <div class="plan-phase">Phase 6</div>
+          <div class="plan-content">
+            <h4>通知 + 测试优化</h4>
+            <p>订阅消息通知接入、日志记录完善、全流程测试</p>
+          </div>
+          <div class="plan-time">2 天</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 项目结构 -->
+    <div class="section">
+      <h2 class="section-title">06 &nbsp;项目交付内容</h2>
+      <p class="section-desc">项目包含完整的源代码、部署文档和测试用例，确保可独立部署和维护。</p>
+      <div style="background: #263238; color: #aed581; padding: 30px; border-radius: 12px; font-family: 'Consolas', monospace; font-size: 14px; line-height: 2; margin-top: 20px;">
+visitor-system/
+&#9500;&#9472;&#9472; cloudfunctions/          <span style="color: #90a4ae;"># 4个云函数（认证/邀请码/拜访/通知）</span>
+&#9500;&#9472;&#9472; miniprogram/             <span style="color: #90a4ae;"># 小程序前端（10个页面）</span>
+&#9474;    &#9500;&#9472;&#9472; pages/               <span style="color: #90a4ae;"># 访客端/员工端/门卫端/人事端/我的</span>
+&#9474;    &#9500;&#9472;&#9472; services/            <span style="color: #90a4ae;"># API封装层</span>
+&#9474;    &#9492;&#9472;&#9472; utils/               <span style="color: #90a4ae;"># 工具函数</span>
+&#9500;&#9472;&#9472; README.md                <span style="color: #90a4ae;"># 技术文档</span>
+&#9500;&#9472;&#9472; 部署指南.md               <span style="color: #90a4ae;"># 零基础部署手册</span>
+&#9492;&#9472;&#9472; 汇报-访客管理系统.html    <span style="color: #90a4ae;"># 管理层汇报材料（本文档）</span>
+      </div>
+    </div>
+
+    <!-- 总结 -->
+    <div class="section" style="background: linear-gradient(135deg, #fafafa, #f0f7ff);">
+      <h2 class="section-title">07 &nbsp;总结</h2>
+      <p style="font-size: 16px; color: #444; line-height: 2;">
+        访客管理系统通过数字化手段解决了传统纸质登记的效率低下、信息不透明和安全隐患等问题。
+        方案采用微信小程序 + 云开发架构，<strong>零硬件投入、零运维成本</strong>，访客无需安装任何App即可使用。
+        系统覆盖员工、访客、门卫、人事四个角色，实现了从预约到离厂的全流程闭环管理，
+        每条记录可追溯、可统计，为企业访客管理提供了一套轻量化、可快速落地的数字化解决方案。
+      </p>
+    </div>
+
+    <div class="footer">
+      访客管理系统方案汇报 &nbsp;|&nbsp; 基于微信小程序 + 微信云开发 &nbsp;|&nbsp; 预计开发周期 10 个工作日
+    </div>
+
+  </div>
+</body>
+</html>

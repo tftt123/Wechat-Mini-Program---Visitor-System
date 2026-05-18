@@ -1,0 +1,31 @@
+<view class="visitor-landing">
+  <view class="header-section">
+    <view class="icon-wrapper">
+      <text class="iconfont scan-icon">📷</text>
+    </view>
+    <view class="title">访客登记系统</view>
+    <view class="subtitle">请扫描门卫处二维码进入</view>
+  </view>
+
+  <view class="card input-section">
+    <view class="form-label">请输入邀请码</view>
+    <input
+      class="form-input invite-input"
+      type="number"
+      maxlength="6"
+      placeholder="6位数字邀请码"
+      value="{{inviteCode}}"
+      bindinput="onCodeInput"
+    />
+    <button class="btn btn-primary" bindtap="submitCode">进入系统</button>
+    <view class="tip-text">邀请码由被访员工提供</view>
+  </view>
+
+  <view class="divider-line">
+    <text class="divider-text">或</text>
+  </view>
+
+  <button class="btn btn-outline scan-btn" bindtap="scanCode">
+    <text>📷 扫码进入</text>
+  </button>
+</view>

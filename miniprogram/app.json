@@ -1,0 +1,47 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/visitor-form/index",
+    "pages/employee/index/index",
+    "pages/employee/invite-code/index",
+    "pages/employee/visit-detail/index",
+    "pages/security/index/index",
+    "pages/security/visit-detail/index",
+    "pages/hr/index/index",
+    "pages/hr/visit-detail/index",
+    "pages/mine/index"
+  ],
+  "window": {
+    "backgroundTextStyle": "dark",
+    "navigationBarBackgroundColor": "#1976d2",
+    "navigationBarTitleText": "访客管理系统",
+    "navigationBarTextStyle": "white",
+    "backgroundColor": "#f5f5f5"
+  },
+  "tabBar": {
+    "color": "#999999",
+    "selectedColor": "#1976d2",
+    "backgroundColor": "#ffffff",
+    "borderStyle": "black",
+    "list": [
+      {
+        "pagePath": "pages/employee/index/index",
+        "text": "员工端"
+      },
+      {
+        "pagePath": "pages/security/index/index",
+        "text": "门卫端"
+      },
+      {
+        "pagePath": "pages/hr/index/index",
+        "text": "人事端"
+      },
+      {
+        "pagePath": "pages/mine/index",
+        "text": "我的"
+      }
+    ]
+  },
+  "sitemapLocation": "sitemap.json",
+  "lazyCodeLoading": "requiredComponents"
+}
