@@ -5,15 +5,17 @@ const app = getApp()
 Page({
   data: {
     userInfo: null,
+    currentTab: 'day',
     visits: [],
     stats: {
       total: 0,
-      today: 0,
+      visits: 0,
+      visitsLabel: '今日来访',
       checkedIn: 0,
       checkedOut: 0
     },
-    filterDate: getToday(),
-    filterEmployeeName: ''
+    filterEmployeeName: '',
+    allRawData: []
   },
 
   onShow() {
@@ -31,28 +33,18 @@ Page({
   },
 
   async loadData() {
-    const { userInfo, filterDate, filterEmployeeName } = this.data
+    const { userInfo } = this.data
     if (!userInfo) return
 
     wx.showLoading({ title: '加载中...' })
     try {
-      const filters = {}
-      if (filterDate) filters.date = filterDate
-      if (filterEmployeeName) filters.employeeName = filterEmployeeName
-
-      const res = await api.getVisits(userInfo, filters)
+      const res = await api.getVisits(userInfo)
       wx.hideLoading()
       if (res.code === 0) {
-        const all = res.data.map(v => ({ ...v, statusInfo: getStatusInfo(v.status) }))
-        const today = getToday()
         this.setData({
-          visits: all,
-          stats: {
-            total: all.length,
-            today: all.filter(v => v.visitDate === today).length,
-            checkedIn: all.filter(v => v.status === 'checked_in').length,
-            checkedOut: all.filter(v => v.status === 'checked_out').length
-          }
+          allRawData: res.data
+        }, () => {
+          this.filterData()
         })
       }
     } catch (err) {
@@ -61,9 +53,68 @@ Page({
     }
   },
 
-  onDateChange(e) {
-    this.setData({ filterDate: e.detail.value })
-    this.loadData()
+  // Tab 切换
+  switchTab(e) {
+    const { tab } = e.currentTarget.dataset
+    this.setData({ currentTab: tab }, () => {
+      this.filterData()
+    })
+  },
+
+  // 按日/月/年过滤数据
+  filterData() {
+    const { currentTab, allRawData, filterEmployeeName } = this.data
+    const today = getToday()
+    const currentMonth = today.substring(0, 7)
+    const currentYear = today.substring(0, 4)
+
+    // 先按时间维度过滤
+    let filtered = allRawData.filter(v => {
+      if (!v.visitDate) return false
+      if (currentTab === 'day') {
+        return v.visitDate === today
+      } else if (currentTab === 'month') {
+        return v.visitDate.startsWith(currentMonth)
+      } else if (currentTab === 'year') {
+        return v.visitDate.startsWith(currentYear)
+      }
+      return true
+    })
+
+    // 再按姓名过滤
+    if (filterEmployeeName.trim()) {
+      const keyword = filterEmployeeName.trim().toLowerCase()
+      filtered = filtered.filter(v =>
+        (v.employeeName && v.employeeName.toLowerCase().includes(keyword)) ||
+        (v.visitorName && v.visitorName.toLowerCase().includes(keyword))
+      )
+    }
+
+    // 统计标签
+    const visitsLabelMap = {
+      day: '今日来访',
+      month: '本月来访',
+      year: '本年来访'
+    }
+
+    // 计算统计
+    const stats = {
+      total: filtered.length,
+      visits: filtered.filter(v => {
+        if (currentTab === 'day') return v.visitDate === today
+        if (currentTab === 'month') return v.visitDate && v.visitDate.startsWith(currentMonth)
+        if (currentTab === 'year') return v.visitDate && v.visitDate.startsWith(currentYear)
+        return false
+      }).length,
+      visitsLabel: visitsLabelMap[currentTab],
+      checkedIn: filtered.filter(v => v.status === 'checked_in').length,
+      checkedOut: filtered.filter(v => v.status === 'checked_out').length
+    }
+
+    this.setData({
+      visits: filtered.map(v => ({ ...v, statusInfo: getStatusInfo(v.status) })),
+      stats
+    })
   },
 
   onNameInput(e) {
@@ -71,7 +122,7 @@ Page({
   },
 
   searchByName() {
-    this.loadData()
+    this.filterData()
   },
 
   goToDetail(e) {

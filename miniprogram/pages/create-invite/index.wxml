@@ -1,21 +1,21 @@
 <view class="container">
   <block wx:if="{{!showResult}}">
     <view class="card">
-      <view class="form-title">填写来访信息</view>
+      <view class="subsection-title">填写来访信息</view>
       <view class="form-group">
-        <text class="form-label">来访日期 *</text>
+        <text class="form-label form-label-required">来访日期</text>
         <picker mode="date" value="{{form.visitDate}}" data-field="visitDate" bindchange="onInput">
-          <view class="form-input picker-value">{{form.visitDate || '请选择日期'}}</view>
+          <view class="form-input picker-value {{!form.visitDate ? 'placeholder' : ''}}">{{form.visitDate || '请选择日期'}}</view>
         </picker>
       </view>
       <view class="form-group">
-        <text class="form-label">来访时间 *</text>
+        <text class="form-label form-label-required">来访时间</text>
         <picker mode="time" value="{{form.visitTime}}" data-field="visitTime" bindchange="onInput">
-          <view class="form-input picker-value">{{form.visitTime || '请选择时间'}}</view>
+          <view class="form-input picker-value {{!form.visitTime ? 'placeholder' : ''}}">{{form.visitTime || '请选择时间'}}</view>
         </picker>
       </view>
       <view class="form-group">
-        <text class="form-label">来访目的 *</text>
+        <text class="form-label form-label-required">来访目的</text>
         <input class="form-input" placeholder="请输入来访目的" value="{{form.purpose}}" data-field="purpose" bindinput="onInput" />
       </view>
     </view>
@@ -23,19 +23,29 @@
   </block>
 
   <block wx:if="{{showResult}}">
-    <view class="card result-card">
-      <view class="result-title">邀请码已生成</view>
-      <view class="result-code">{{inviteCode}}</view>
+    <view class="card result-card {{showResult ? 'result-animate' : ''}}">
+      <view class="invite-code-section">
+        <view class="invite-code-display">{{inviteCode}}</view>
+        <view class="invite-code-validity" wx:if="{{validityDate}}">
+          <text class="text-muted">有效期至 {{validityDate}}</text>
+        </view>
+      </view>
       <view class="result-tip">请将此邀请码告知访客</view>
       <view class="result-info">
-        <text>日期：{{form.visitDate}} {{form.visitTime}}</text>
+        <text class="text-muted">日期：{{form.visitDate}} {{form.visitTime}}</text>
       </view>
       <view class="result-info">
-        <text>目的：{{form.purpose}}</text>
+        <text class="text-muted">目的：{{form.purpose}}</text>
       </view>
     </view>
-    <button class="btn btn-outline" bindtap="copyCode">复制邀请码</button>
-    <button class="btn btn-default mt-2" bindtap="reset">再生成一个</button>
-    <button class="btn btn-default mt-2" bindtap="goBack">返回</button>
+
+    <view class="action-group">
+      <button class="btn btn-primary" bindtap="copyCode">复制邀请码</button>
+      <button class="btn btn-secondary mt-2" open-type="share">微信分享</button>
+    </view>
+
+    <view class="divider-text mt-3 mb-3">或</view>
+
+    <button class="btn btn-ghost" bindtap="reset">再生成一个</button>
   </block>
 </view>

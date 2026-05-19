@@ -1,76 +1,110 @@
+@import "../../app.wxss";
+
 .mine-page {
   min-height: 100vh;
-  background: #F5F7FA;
+  background: var(--color-background);
+  padding: 32rpx;
+  padding-bottom: 40rpx;
 }
 
+/* 头部区域 - 白底卡片，无红色渐变 */
 .header-section {
-  background: #FFFFFF;
-  padding: 60rpx 40rpx 60rpx;
   text-align: center;
-  border-radius: 40rpx;
-  margin: 16rpx;
-  border: 1rpx solid #E5E5E5;
+  padding: 48rpx 32rpx;
 }
 
 .logo-img {
-  width: 320rpx;
-  height: 80rpx;
-  margin: 0 auto 32rpx;
+  width: 280rpx;
+  height: 72rpx;
+  margin: 0 auto 24rpx;
   display: block;
 }
 
 .user-name {
-  font-size: 40rpx;
+  font-size: 36rpx;
   font-weight: 600;
-  margin-bottom: 12rpx;
-  color: #171717;
+  margin-bottom: 16rpx;
+  color: var(--color-text-primary);
 }
 
-.user-role {
+/* 角色标签 - 深色 pill */
+.role-tag {
+  display: inline-block;
+  padding: 6rpx 20rpx;
+  border-radius: var(--radius-pill);
+  background: var(--color-primary);
+  color: #fff;
+  font-size: 22rpx;
+  font-weight: 500;
+  margin-bottom: 16rpx;
+}
+
+.user-phone {
   font-size: 28rpx;
-  color: #737373;
+  color: var(--color-text-secondary);
   font-weight: 400;
 }
 
+.user-hint {
+  font-size: 28rpx;
+  color: var(--color-text-muted);
+  font-weight: 400;
+}
+
+/* 菜单卡片 */
 .menu-card {
-  margin: 32rpx;
   padding: 0;
   overflow: hidden;
-  background: #fff;
-  border-radius: 20rpx;
-  border: 1rpx solid #E2E8F0;
-  box-shadow: 0 2rpx 8rpx rgba(0,0,0,0.04);
 }
 
 .menu-item {
   display: flex;
   align-items: center;
-  padding: 32rpx;
-  background: #fff;
-  border-bottom: 1rpx solid #F1F5F9;
+  padding: 28rpx 24rpx;
+  background: var(--color-surface);
+  position: relative;
+  transition: background 0.15s;
 }
 
-.menu-item:last-child {
-  border-bottom: none;
+.menu-item:active {
+  background: #FAFBFC;
 }
 
-.menu-icon {
-  font-size: 40rpx;
-  margin-right: 24rpx;
-  width: 60rpx;
-  text-align: center;
+/* 深色圆形图标（主色调） */
+.menu-icon-wrap {
+  width: 64rpx;
+  height: 64rpx;
+  background: var(--color-primary);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 20rpx;
+  flex-shrink: 0;
+}
+
+/* 危险操作图标用红色（退出登录） */
+.menu-icon-danger {
+  background: var(--color-danger);
+}
+
+.menu-icon-inner {
+  color: #FFFFFF;
+  font-size: 26rpx;
+  font-weight: 600;
 }
 
 .menu-text {
   flex: 1;
-  font-size: 30rpx;
-  color: #1E293B;
+  font-size: 28rpx;
+  color: var(--color-text-primary);
   font-weight: 500;
 }
 
 .menu-arrow {
-  font-size: 36rpx;
-  color: #CBD5E1;
+  font-size: 32rpx;
+  color: var(--color-border);
+  font-weight: 300;
 }
 
 /* 弹窗 */
@@ -80,7 +114,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0,0,0,0.5);
+  background: rgba(26,42,58,0.5);
   z-index: 100;
 }
 
@@ -89,28 +123,37 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 80%;
-  max-width: 600rpx;
-  background: #fff;
-  border-radius: 24rpx;
+  width: 84%;
+  max-width: 640rpx;
+  background: var(--color-surface);
+  border-radius: var(--radius-md);
   z-index: 101;
-  padding: 48rpx;
-  box-shadow: 0 8rpx 32rpx rgba(0,0,0,0.12);
+  overflow: hidden;
+  box-shadow: var(--shadow-modal);
 }
 
 .modal-title {
-  font-size: 36rpx;
+  font-size: 30rpx;
   font-weight: 600;
   text-align: center;
-  margin-bottom: 32rpx;
-  color: #1E293B;
+  padding: 28rpx 24rpx;
+  border-bottom: 1rpx solid var(--color-border);
+  color: var(--color-text-primary);
 }
 
 .modal-body {
-  margin-bottom: 32rpx;
+  padding: 32rpx 24rpx;
+  max-height: 60vh;
+  overflow-y: auto;
 }
 
 .modal-footer {
   display: flex;
-  gap: 20rpx;
+  padding: 20rpx 24rpx 24rpx;
+  gap: 16rpx;
+  border-top: 1rpx solid var(--color-border);
+}
+
+.modal-btn {
+  flex: 1;
 }

@@ -28,7 +28,7 @@ function getToday() {
   return `${year}-${month}-${day}`
 }
 
-// 状态映射
+// 状态映射 — 语义化配色（V2.0 企业级规范）
 const STATUS_MAP = {
   'awaiting_visitor': { text: '待访客填表', class: 'status-awaiting' },
   'pending': { text: '待确认', class: 'status-pending' },

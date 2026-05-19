@@ -1,14 +1,28 @@
 <view class="container">
   <view class="page-title">拜访记录统计</view>
 
+  <!-- Tab 栏：按日 | 按月 | 按年 -->
+  <view class="tab-bar">
+    <view class="tab-item {{currentTab === 'day' ? 'active' : ''}}" bindtap="switchTab" data-tab="day">
+      按日
+    </view>
+    <view class="tab-item {{currentTab === 'month' ? 'active' : ''}}" bindtap="switchTab" data-tab="month">
+      按月
+    </view>
+    <view class="tab-item {{currentTab === 'year' ? 'active' : ''}}" bindtap="switchTab" data-tab="year">
+      按年
+    </view>
+  </view>
+
+  <!-- 统计卡片 -->
   <view class="stats-row">
     <view class="stats-card">
       <view class="stats-num">{{stats.total}}</view>
       <view class="stats-label">全部记录</view>
     </view>
     <view class="stats-card">
-      <view class="stats-num">{{stats.today}}</view>
-      <view class="stats-label">今日来访</view>
+      <view class="stats-num">{{stats.visits}}</view>
+      <view class="stats-label">{{stats.visitsLabel}}</view>
     </view>
     <view class="stats-card">
       <view class="stats-num">{{stats.checkedIn}}</view>
@@ -20,34 +34,44 @@
     </view>
   </view>
 
-  <view class="card filter-card">
-    <view class="form-group">
-      <text class="form-label">日期筛选</text>
-      <picker mode="date" value="{{filterDate}}" bindchange="onDateChange">
-        <view class="form-input picker-value">{{filterDate || '全部日期'}}</view>
-      </picker>
-    </view>
-    <view class="form-group">
-      <text class="form-label">被访人姓名</text>
-      <view class="filter-row">
-        <input class="form-input" style="flex:1;margin-right:20rpx;" placeholder="输入姓名搜索" value="{{filterEmployeeName}}" bindinput="onNameInput" />
-        <button class="btn btn-primary btn-sm" bindtap="searchByName">搜索</button>
+  <!-- 姓名搜索 -->
+  <view class="search-bar">
+    <view class="search-input-wrap">
+      <input class="search-input" placeholder="输入被访人姓名搜索" value="{{filterEmployeeName}}" bindinput="onNameInput" bindconfirm="searchByName" />
+      <view class="search-btn" bindtap="searchByName">
+        <text class="search-btn-text">搜索</text>
       </view>
     </view>
   </view>
 
+  <!-- 列表 -->
   <view class="list">
-    <view class="visit-item card" wx:for="{{visits}}" wx:key="visitId" bindtap="goToDetail" data-id="{{item.visitId}}">
+    <view class="card visit-item {{item.status === 'item_checked' ? 'card-highlight' : ''}}" wx:for="{{visits}}" wx:key="visitId" bindtap="goToDetail" data-id="{{item.visitId}}">
       <view class="item-header">
-        <text class="item-name">{{item.visitorName}}</text>
+        <text class="item-name">{{item.visitorName || '未填写姓名'}}</text>
         <text class="status-tag {{item.statusInfo.class}}">{{item.statusInfo.text}}</text>
       </view>
-      <view class="item-info">被访人：{{item.employeeName}} {{item.department}}</view>
-      <view class="item-info">{{item.visitDate}} {{item.visitTime}} · {{item.purpose}}</view>
-      <view class="item-info">手机：{{item.visitorPhone}}</view>
+      <view class="item-meta" wx:if="{{item.visitorCompany || item.purpose}}">
+        <text class="item-company-purpose">{{item.visitorCompany || ''}} {{item.visitorCompany && item.purpose ? '·' : ''}} {{item.purpose || ''}}</text>
+      </view>
+      <view class="item-divider"></view>
+      <view class="item-detail-row">
+        <text class="item-detail-text">被访人：{{item.employeeName}} {{item.department}}</text>
+      </view>
+      <view class="item-detail-row">
+        <text class="item-detail-text">{{item.visitDate}} {{item.visitTime}}</text>
+      </view>
+      <view class="item-detail-row">
+        <text class="item-detail-text">手机：{{item.visitorPhone}}</text>
+      </view>
+      <view class="arrow-right">›</view>
     </view>
     <view class="empty-state" wx:if="{{visits.length === 0}}">
+      <view class="empty-state-icon">📋</view>
       <view class="empty-state-text">暂无拜访记录</view>
+    </view>
+    <view class="list-footer" wx:if="{{visits.length > 0}}">
+      <text class="list-footer-text">已显示 {{visits.length}} 条</text>
     </view>
   </view>
 </view>

@@ -1,77 +1,30 @@
-/* 被访人信息卡片 */
-.info-card {
-  background: #FFFFFF;
-  color: #171717;
-  border-radius: 24rpx;
-  padding: 40rpx;
-  margin-bottom: 32rpx;
-  border: 1rpx solid #E5E5E5;
-}
+@import "../../app.wxss";
 
-.info-title {
-  font-size: 32rpx;
-  font-weight: 600;
-  margin-bottom: 24rpx;
-  opacity: 0.9;
-}
-
-.info-row {
-  display: flex;
+/* 被访人信息区域（只读态） */
+.info-section .subsection-title {
   margin-bottom: 16rpx;
+}
+
+.info-section .info-row {
+  padding: 12rpx 0;
+}
+
+.info-value-readonly {
+  color: var(--color-text-muted);
   font-size: 28rpx;
+  font-weight: 400;
 }
 
-.info-row:last-child {
-  margin-bottom: 0;
+/* 表单区域 */
+.form-section {
+  margin-top: 16rpx;
 }
 
-.info-label {
-  opacity: 0.7;
-  width: 140rpx;
-  flex-shrink: 0;
+.form-section .subsection-title {
+  margin-bottom: 24rpx;
 }
 
-.info-value {
-  font-weight: 500;
-}
-
-/* 表单卡片 */
-.form-card {
-  background: #fff;
-  border-radius: 24rpx;
-  padding: 40rpx;
-  margin-bottom: 32rpx;
-  border: 1rpx solid #E2E8F0;
-  box-shadow: 0 2rpx 12rpx rgba(0,0,0,0.04);
-}
-
-.form-title {
-  font-size: 32rpx;
-  font-weight: 600;
-  margin-bottom: 32rpx;
-  color: #1E293B;
-}
-
-.picker-value {
-  display: flex;
-  align-items: center;
-  height: 96rpx;
-  color: #1E293B;
-}
-
-.picker-value.placeholder {
-  color: #94A3B8;
-}
-
-.submit-btn {
-  background: #C62828;
-  color: #fff;
-  border-radius: 16rpx;
-  font-weight: 600;
-  font-size: 32rpx;
-}
-
-.submit-btn:disabled {
-  background: #E2E8F0 !important;
-  color: #94A3B8 !important;
+/* 错误输入框样式 */
+.form-input-error {
+  border-color: var(--color-danger) !important;
 }

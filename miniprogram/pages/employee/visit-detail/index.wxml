@@ -1,72 +1,103 @@
 <view class="container">
   <block wx:if="{{detail}}">
-    <view class="card detail-card">
-      <view class="detail-header">
-        <text class="detail-title">拜访详情</text>
-        <text class="status-tag {{detail.statusInfo.class}}">{{detail.statusInfo.text}}</text>
+    <!-- 访客信息主卡（待处理时左侧红色竖线） -->
+    <view class="card {{detail.status === 'pending' ? 'card-highlight' : ''}}">
+      <view class="visit-header">
+        <view class="visit-name-row">
+          <text class="visit-name">{{detail.visitorName || '未填写姓名'}}</text>
+          <text class="status-tag {{detail.statusInfo.class}}">{{detail.statusInfo.text}}</text>
+        </view>
+        <text class="visit-company" wx:if="{{detail.visitorCompany}}">{{detail.visitorCompany}}</text>
       </view>
 
-      <view class="detail-section">
-        <view class="section-title">访客信息</view>
-        <view class="detail-row"><text class="row-label">姓名</text><text class="row-value">{{detail.visitorName || '未填写'}}</text></view>
-        <view class="detail-row"><text class="row-label">手机号</text><text class="row-value">{{detail.visitorPhone || '未填写'}}</text></view>
-        <view class="detail-row"><text class="row-label">公司</text><text class="row-value">{{detail.visitorCompany || '未填写'}}</text></view>
+      <view class="info-row">
+        <text class="info-label">手机号</text>
+        <text class="info-value">{{detail.visitorPhone || '未填写'}}</text>
       </view>
-
-      <view class="detail-section">
-        <view class="section-title">拜访信息</view>
-        <view class="detail-row"><text class="row-label">日期时间</text><text class="row-value">{{detail.visitDate}} {{detail.visitTime}}</text></view>
-        <view class="detail-row"><text class="row-label">来访目的</text><text class="row-value">{{detail.purpose || '未填写'}}</text></view>
-        <view class="detail-row"><text class="row-label">邀请码</text><text class="row-value">{{detail.inviteCode}}</text></view>
+      <view class="info-row">
+        <text class="info-label">来访时间</text>
+        <text class="info-value">{{detail.visitDate}} {{detail.visitTime}}</text>
       </view>
-
-      <view class="detail-section">
-        <view class="section-title">被访人信息</view>
-        <view class="detail-row"><text class="row-label">姓名</text><text class="row-value">{{detail.employeeName}}</text></view>
-        <view class="detail-row"><text class="row-label">部门</text><text class="row-value">{{detail.department || '未填写'}}</text></view>
+      <view class="info-row">
+        <text class="info-label">来访目的</text>
+        <text class="info-value">{{detail.purpose || '未填写'}}</text>
       </view>
-
-      <view class="detail-section" wx:if="{{detail.checkedInAtStr}}">
-        <view class="section-title">入厂记录</view>
-        <view class="detail-row"><text class="row-label">入厂时间</text><text class="row-value">{{detail.checkedInAtStr}}</text></view>
+      <view class="info-row">
+        <text class="info-label">邀请码</text>
+        <text class="info-value">{{detail.inviteCode}}</text>
       </view>
+    </view>
 
-      <view class="detail-section" wx:if="{{detail.itemsCarried !== null}}">
-        <view class="section-title">物品确认</view>
-        <view class="detail-row"><text class="row-label">携带物品</text><text class="row-value">{{detail.itemsCarried ? '是' : '否'}}</text></view>
-        <view class="detail-row" wx:if="{{detail.itemDescription}}"><text class="row-label">物品说明</text><text class="row-value">{{detail.itemDescription}}</text></view>
-        <view class="photo-preview-grid" wx:if="{{detail.itemPhotos && detail.itemPhotos.length > 0}}">
-          <view class="photo-preview-item" wx:for="{{detail.itemPhotos}}" wx:key="*this">
-            <image src="{{item}}" mode="aspectFill" />
+    <!-- 入厂记录 -->
+    <view class="card" wx:if="{{detail.checkedInAtStr}}">
+      <view class="subsection-title">入厂记录</view>
+      <view class="info-row">
+        <text class="info-label">入厂时间</text>
+        <text class="info-value">{{detail.checkedInAtStr}}</text>
+      </view>
+    </view>
+
+    <!-- 物品确认（已确认时展示） -->
+    <view class="card" wx:if="{{detail.itemsCarried !== null}}">
+      <view class="subsection-title">物品确认</view>
+      <view class="info-row">
+        <text class="info-label">携带物品</text>
+        <text class="info-value">{{detail.itemsCarried ? '是' : '否'}}</text>
+      </view>
+      <view class="info-row" wx:if="{{detail.itemDescription}}">
+        <text class="info-label">物品说明</text>
+        <text class="info-value">{{detail.itemDescription}}</text>
+      </view>
+      <view class="photo-preview-grid" wx:if="{{detail.itemPhotos && detail.itemPhotos.length > 0}}">
+        <view class="photo-preview-item" wx:for="{{detail.itemPhotos}}" wx:key="*this">
+          <image src="{{item}}" mode="aspectFill" />
+        </view>
+      </view>
+    </view>
+
+    <!-- 出厂记录 -->
+    <view class="card" wx:if="{{detail.checkedOutAtStr}}">
+      <view class="subsection-title">出厂记录</view>
+      <view class="info-row">
+        <text class="info-label">出厂时间</text>
+        <text class="info-value">{{detail.checkedOutAtStr}}</text>
+      </view>
+      <view class="info-row">
+        <text class="info-label">回收工牌</text>
+        <text class="info-value">{{detail.badgeReturned ? '是' : '否'}}</text>
+      </view>
+    </view>
+
+    <!-- 处理记录 Timeline -->
+    <view class="card" wx:if="{{detail.logs.length > 0}}">
+      <view class="subsection-title">处理记录</view>
+      <view class="timeline">
+        <view class="timeline-item {{index < detail.logs.length - 1 ? 'completed' : 'current'}}" wx:for="{{detail.logs}}" wx:key="_id">
+          <view class="timeline-content">
+            <view class="timeline-header">
+              <text class="timeline-time" wx:if="{{item.createdAt}}">{{item.createdAt}}</text>
+              <text class="timeline-operator">{{item.operatorName}}</text>
+            </view>
+            <text class="timeline-action">{{item.action}}</text>
+            <text class="timeline-role" wx:if="{{item.operatorRole}}">{{item.operatorRole}}</text>
           </view>
         </view>
       </view>
-
-      <view class="detail-section" wx:if="{{detail.checkedOutAtStr}}">
-        <view class="section-title">出厂记录</view>
-        <view class="detail-row"><text class="row-label">出厂时间</text><text class="row-value">{{detail.checkedOutAtStr}}</text></view>
-        <view class="detail-row"><text class="row-label">回收工牌</text><text class="row-value">{{detail.badgeReturned ? '是' : '否'}}</text></view>
-      </view>
-
-      <view class="detail-section" wx:if="{{detail.logs.length > 0}}">
-        <view class="section-title">操作日志</view>
-        <view class="log-item" wx:for="{{detail.logs}}" wx:key="_id">
-          <text class="log-action">{{item.action}}</text>
-          <text class="log-operator">{{item.operatorName}} ({{item.operatorRole}})</text>
-        </view>
-      </view>
     </view>
 
-    <button wx:if="{{canConfirm}}" class="btn btn-primary" bindtap="confirmVisit">确认拜访</button>
+    <!-- 操作按钮区 -->
+    <view class="action-area">
+      <button wx:if="{{canConfirm}}" class="btn btn-primary" bindtap="confirmVisit">确认拜访</button>
 
-    <view wx:if="{{canEdit || canCancel}}" class="btn-group">
-      <button wx:if="{{canEdit}}" class="btn btn-outline" bindtap="showEdit">编辑信息</button>
-      <button wx:if="{{canCancel}}" class="btn btn-default mt-2" bindtap="doCancel">作废记录</button>
-    </view>
+      <view wx:if="{{canItemCheck}}" class="action-group">
+        <button class="btn btn-primary" bindtap="showItemModal">携带物品</button>
+        <button class="btn btn-secondary mt-2" bindtap="itemCheckNo">未携带物品</button>
+      </view>
 
-    <view wx:if="{{canItemCheck}}" class="btn-group">
-      <button class="btn btn-success" bindtap="itemCheckNo">不携带物品</button>
-      <button class="btn btn-danger mt-2" bindtap="showItemModal">携带物品</button>
+      <view wx:if="{{canEdit || canCancel}}" class="action-group mt-2">
+        <button wx:if="{{canEdit}}" class="btn btn-outline" bindtap="showEdit">编辑信息</button>
+        <button wx:if="{{canCancel}}" class="btn btn-danger-light mt-2" bindtap="doCancel">作废记录</button>
+      </view>
     </view>
 
     <!-- 物品确认弹窗 -->
@@ -75,26 +106,29 @@
       <view class="modal-title">物品确认</view>
       <view class="modal-body">
         <view class="form-group">
-          <text class="form-label">物品说明 *</text>
-          <textarea class="form-input" style="height:160rpx;padding:20rpx;" placeholder="请填写物品说明和携带事由" value="{{itemForm.description}}" bindinput="onItemDescInput" />
+          <text class="form-label form-label-required">物品说明</text>
+          <textarea class="form-input form-textarea" placeholder="请填写物品名称、数量及携带事由" value="{{itemForm.description}}" bindinput="onItemDescInput" />
         </view>
         <view class="form-group">
-          <text class="form-label">物品照片 *（至少1张）</text>
+          <text class="form-label form-label-required">物品照片</text>
           <view class="photo-grid">
             <view class="photo-item" wx:for="{{itemForm.photos}}" wx:key="*this">
               <image class="photo-img" src="{{item}}" mode="aspectFill" />
               <view class="photo-remove" bindtap="removePhoto" data-index="{{index}}">×</view>
             </view>
-            <view class="photo-add" bindtap="choosePhoto" wx:if="{{itemForm.photos.length < 6}}">
-              <text class="photo-add-icon">+</text>
-              <text class="photo-add-text">拍照</text>
+            <view class="upload-area" bindtap="choosePhoto" wx:if="{{itemForm.photos.length < 6}}">
+              <view class="upload-content">
+                <text class="upload-icon">+</text>
+                <text class="upload-text">添加照片</text>
+              </view>
             </view>
           </view>
+          <text class="text-muted mt-1" style="font-size:22rpx;">已上传 {{itemForm.photos.length}}/6 张</text>
         </view>
       </view>
       <view class="modal-footer">
-        <button class="btn btn-default" style="flex:1;margin-right:20rpx;" bindtap="closeItemModal">取消</button>
-        <button class="btn btn-primary" style="flex:1;" bindtap="submitItemCheck">确认</button>
+        <button class="btn btn-outline modal-btn" bindtap="closeItemModal">取消</button>
+        <button class="btn btn-primary modal-btn" bindtap="submitItemCheck">提交</button>
       </view>
     </view>
 
@@ -104,25 +138,25 @@
       <view class="modal-title">编辑拜访信息</view>
       <view class="modal-body">
         <view class="form-group">
-          <text class="form-label">来访日期 *</text>
+          <text class="form-label form-label-required">来访日期</text>
           <picker mode="date" value="{{editForm.visitDate}}" data-field="visitDate" bindchange="onEditInput">
             <view class="form-input picker-value">{{editForm.visitDate || '请选择'}}</view>
           </picker>
         </view>
         <view class="form-group">
-          <text class="form-label">来访时间 *</text>
+          <text class="form-label form-label-required">来访时间</text>
           <picker mode="time" value="{{editForm.visitTime}}" data-field="visitTime" bindchange="onEditInput">
             <view class="form-input picker-value">{{editForm.visitTime || '请选择'}}</view>
           </picker>
         </view>
         <view class="form-group">
-          <text class="form-label">来访目的 *</text>
+          <text class="form-label form-label-required">来访目的</text>
           <input class="form-input" placeholder="请输入来访目的" value="{{editForm.purpose}}" data-field="purpose" bindinput="onEditInput" />
         </view>
       </view>
       <view class="modal-footer">
-        <button class="btn btn-default" style="flex:1;margin-right:20rpx;" bindtap="closeEdit">取消</button>
-        <button class="btn btn-primary" style="flex:1;" bindtap="doUpdate">保存</button>
+        <button class="btn btn-outline modal-btn" bindtap="closeEdit">取消</button>
+        <button class="btn btn-primary modal-btn" bindtap="doUpdate">保存</button>
       </view>
     </view>
   </block>

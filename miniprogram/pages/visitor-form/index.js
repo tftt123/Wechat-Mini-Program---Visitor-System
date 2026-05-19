@@ -15,7 +15,12 @@ Page({
       purpose: '',
       escortName: '',
       badgeType: ''
-    }
+    },
+    errors: {
+      visitorName: '',
+      visitorPhone: ''
+    },
+    isFormValid: false
   },
 
   async onLoad(options) {
@@ -48,6 +53,8 @@ Page({
             escortName: res.data.escortName || '',
             badgeType: res.data.badgeType || ''
           }
+        }, () => {
+          this.checkFormValidity()
         })
       } else {
         showToast(res.msg)
@@ -65,24 +72,63 @@ Page({
     const { field } = e.currentTarget.dataset
     this.setData({
       [`form.${field}`]: e.detail.value
+    }, () => {
+      this.checkFormValidity()
     })
   },
 
   onBadgeTypeChange(e) {
     const types = this.data.badgeTypes
-    this.setData({ 'form.badgeType': types[e.detail.value] })
+    this.setData({ 'form.badgeType': types[e.detail.value] }, () => {
+      this.checkFormValidity()
+    })
+  },
+
+  // 字段失焦验证
+  validateField(e) {
+    const { field } = e.currentTarget.dataset
+    const { form } = this.data
+    let error = ''
+
+    if (field === 'visitorName' && !form.visitorName.trim()) {
+      error = '请输入姓名'
+    }
+    if (field === 'visitorPhone') {
+      if (!form.visitorPhone.trim()) {
+        error = '请输入手机号'
+      } else if (!/^1[3-9]\d{9}$/.test(form.visitorPhone)) {
+        error = '请输入正确的手机号'
+      }
+    }
+
+    this.setData({
+      [`errors.${field}`]: error
+    })
+  },
+
+  // 检查表单整体有效性
+  checkFormValidity() {
+    const { form } = this.data
+    const isValid = !!form.visitorName.trim() &&
+                    !!form.visitorPhone.trim() &&
+                    /^1[3-9]\d{9}$/.test(form.visitorPhone) &&
+                    !!form.visitDate &&
+                    !!form.visitTime &&
+                    !!form.purpose.trim()
+    this.setData({ isFormValid: isValid })
   },
 
   // 提交表单
   async submitForm() {
     const { inviteCode, form } = this.data
 
+    // 前置验证
     if (!form.visitorName.trim()) {
-      showToast('请输入姓名')
+      this.setData({ 'errors.visitorName': '请输入姓名' })
       return
     }
     if (!form.visitorPhone.trim() || !/^1[3-9]\d{9}$/.test(form.visitorPhone)) {
-      showToast('请输入正确的手机号')
+      this.setData({ 'errors.visitorPhone': '请输入正确的手机号' })
       return
     }
     if (!form.visitDate) {
@@ -103,14 +149,15 @@ Page({
       const res = await api.fillVisitorInfo(inviteCode, form)
       wx.hideLoading()
       if (res.code === 0) {
-        wx.showModal({
+        // 使用绿色 toast 提示成功，2s 后跳转
+        wx.showToast({
           title: '提交成功',
-          content: '您的拜访信息已提交，等待被访人确认',
-          showCancel: false,
-          success: () => {
-            wx.redirectTo({ url: '/pages/index/index' })
-          }
+          icon: 'success',
+          duration: 2000
         })
+        setTimeout(() => {
+          wx.redirectTo({ url: '/pages/index/index' })
+        }, 2000)
       } else {
         showToast(res.msg)
       }

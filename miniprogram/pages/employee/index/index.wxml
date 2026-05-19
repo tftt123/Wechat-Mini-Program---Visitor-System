@@ -19,7 +19,7 @@
   <view class="tab-bar">
     <view class="tab-item {{currentTab === 'pending' ? 'active' : ''}}" bindtap="switchTab" data-tab="pending">
       待确认
-      <text wx:if="{{stats.pending > 0}}" class="tab-badge">{{stats.pending}}</text>
+      <text wx:if="{{stats.pending > 0}}" class="tab-badge"></text>
     </view>
     <view class="tab-item {{currentTab === 'today' ? 'active' : ''}}" bindtap="switchTab" data-tab="today">
       今日来访
@@ -31,37 +31,54 @@
 
   <!-- 待确认列表 -->
   <view class="list" wx:if="{{currentTab === 'pending'}}">
-    <view class="visit-item card" wx:for="{{pendingList}}" wx:key="visitId" bindtap="goToDetail" data-id="{{item.visitId}}">
+    <view class="card visit-item {{item.status === 'pending' ? 'card-highlight' : ''}}" wx:for="{{pendingList}}" wx:key="visitId" bindtap="goToDetail" data-id="{{item.visitId}}">
       <view class="item-header">
         <text class="item-name">{{item.visitorName || '未填写姓名'}}</text>
         <text class="status-tag {{item.statusInfo.class}}">{{item.statusInfo.text}}</text>
       </view>
-      <view class="item-info">
-        <text class="item-phone">{{item.visitorPhone || '未填写电话'}}</text>
+      <view class="item-meta" wx:if="{{item.visitorCompany || item.purpose}}">
+        <text class="item-company-purpose">{{item.visitorCompany || ''}} {{item.visitorCompany && item.purpose ? '·' : ''}} {{item.purpose || ''}}</text>
       </view>
-      <view class="item-info">
-        <text>{{item.visitDate}} {{item.visitTime}}</text>
+      <view class="item-divider"></view>
+      <view class="item-detail-row">
+        <text class="item-detail-text">{{item.visitorPhone || '未填写电话'}}</text>
       </view>
-      <view class="item-purpose" wx:if="{{item.purpose}}">目的：{{item.purpose}}</view>
+      <view class="item-detail-row">
+        <text class="item-detail-text">{{item.visitDate}} {{item.visitTime}}</text>
+      </view>
+      <view class="arrow-right">›</view>
     </view>
     <view class="empty-state" wx:if="{{pendingList.length === 0}}">
+      <view class="empty-state-icon">📋</view>
       <view class="empty-state-text">暂无待确认拜访</view>
+    </view>
+    <view class="list-footer" wx:if="{{pendingList.length > 0}}">
+      <text class="list-footer-text">已显示 {{pendingList.length}} 条</text>
     </view>
   </view>
 
   <!-- 今日来访列表 -->
   <view class="list" wx:if="{{currentTab === 'today'}}">
-    <view class="visit-item card" wx:for="{{todayList}}" wx:key="visitId" bindtap="goToDetail" data-id="{{item.visitId}}">
+    <view class="card visit-item" wx:for="{{todayList}}" wx:key="visitId" bindtap="goToDetail" data-id="{{item.visitId}}">
       <view class="item-header">
         <text class="item-name">{{item.visitorName || '未填写姓名'}}</text>
         <text class="status-tag {{item.statusInfo.class}}">{{item.statusInfo.text}}</text>
       </view>
-      <view class="item-info">
-        <text>{{item.visitTime}} · {{item.purpose || '无目的'}}</text>
+      <view class="item-meta" wx:if="{{item.visitorCompany || item.purpose}}">
+        <text class="item-company-purpose">{{item.visitorCompany || ''}} {{item.visitorCompany && item.purpose ? '·' : ''}} {{item.purpose || ''}}</text>
       </view>
+      <view class="item-divider"></view>
+      <view class="item-detail-row">
+        <text class="item-detail-text">预计时间：{{item.visitTime}}</text>
+      </view>
+      <view class="arrow-right">›</view>
     </view>
     <view class="empty-state" wx:if="{{todayList.length === 0}}">
+      <view class="empty-state-icon">📋</view>
       <view class="empty-state-text">今日暂无来访</view>
+    </view>
+    <view class="list-footer" wx:if="{{todayList.length > 0}}">
+      <text class="list-footer-text">已显示 {{todayList.length}} 条</text>
     </view>
   </view>
 
@@ -75,18 +92,26 @@
         </view>
       </picker>
     </view>
-    <view class="visit-item card" wx:for="{{allList}}" wx:key="visitId" bindtap="goToDetail" data-id="{{item.visitId}}">
+    <view class="card visit-item {{item.status === 'pending' ? 'card-highlight' : ''}}" wx:for="{{allList}}" wx:key="visitId" bindtap="goToDetail" data-id="{{item.visitId}}">
       <view class="item-header">
         <text class="item-name">{{item.visitorName || '未填写姓名'}}</text>
         <text class="status-tag {{item.statusInfo.class}}">{{item.statusInfo.text}}</text>
       </view>
-      <view class="item-info">
-        <text>{{item.visitDate}} {{item.visitTime}}</text>
+      <view class="item-meta" wx:if="{{item.visitorCompany || item.purpose}}">
+        <text class="item-company-purpose">{{item.visitorCompany || ''}} {{item.visitorCompany && item.purpose ? '·' : ''}} {{item.purpose || ''}}</text>
       </view>
-      <view class="item-purpose" wx:if="{{item.purpose}}">目的：{{item.purpose}}</view>
+      <view class="item-divider"></view>
+      <view class="item-detail-row">
+        <text class="item-detail-text">{{item.visitDate}} {{item.visitTime}}</text>
+      </view>
+      <view class="arrow-right">›</view>
     </view>
     <view class="empty-state" wx:if="{{allList.length === 0}}">
+      <view class="empty-state-icon">📋</view>
       <view class="empty-state-text">暂无记录</view>
+    </view>
+    <view class="list-footer" wx:if="{{allList.length > 0}}">
+      <text class="list-footer-text">已显示 {{allList.length}} 条</text>
     </view>
   </view>
 </view>

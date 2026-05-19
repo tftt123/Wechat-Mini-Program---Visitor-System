@@ -2,6 +2,17 @@ const api = require('../../services/api')
 const { showToast, getToday } = require('../../utils/util')
 const app = getApp()
 
+function getValidityDate(startDate, days = 7) {
+  if (!startDate) return ''
+  const d = new Date(startDate)
+  if (isNaN(d.getTime())) return ''
+  d.setDate(d.getDate() + days)
+  const year = d.getFullYear()
+  const month = (d.getMonth() + 1).toString().padStart(2, '0')
+  const day = d.getDate().toString().padStart(2, '0')
+  return `${year}-${month}-${day}`
+}
+
 Page({
   data: {
     form: {
@@ -10,6 +21,7 @@ Page({
       purpose: ''
     },
     inviteCode: '',
+    validityDate: '',
     showResult: false
   },
 
@@ -21,6 +33,16 @@ Page({
   onLoad() {
     if (!app.checkPagePermission('pages/create-invite/index')) {
       wx.navigateBack()
+    }
+  },
+
+  // 分享配置
+  onShareAppMessage() {
+    const { inviteCode, form } = this.data
+    return {
+      title: `来访邀请码：${inviteCode}`,
+      path: `/pages/visitor-form/index?inviteCode=${inviteCode}`,
+      desc: `来访日期：${form.visitDate} ${form.visitTime}，目的：${form.purpose}`
     }
   },
 
@@ -55,6 +77,7 @@ Page({
       if (res.code === 0) {
         this.setData({
           inviteCode: res.data.inviteCode,
+          validityDate: getValidityDate(form.visitDate, 7),
           showResult: true
         })
       } else {
@@ -80,6 +103,7 @@ Page({
   reset() {
     this.setData({
       inviteCode: '',
+      validityDate: '',
       showResult: false,
       form: {
         visitDate: getToday(),
