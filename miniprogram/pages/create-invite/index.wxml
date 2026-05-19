@@ -1,0 +1,41 @@
+<view class="container">
+  <block wx:if="{{!showResult}}">
+    <view class="card">
+      <view class="form-title">填写来访信息</view>
+      <view class="form-group">
+        <text class="form-label">来访日期 *</text>
+        <picker mode="date" value="{{form.visitDate}}" data-field="visitDate" bindchange="onInput">
+          <view class="form-input picker-value">{{form.visitDate || '请选择日期'}}</view>
+        </picker>
+      </view>
+      <view class="form-group">
+        <text class="form-label">来访时间 *</text>
+        <picker mode="time" value="{{form.visitTime}}" data-field="visitTime" bindchange="onInput">
+          <view class="form-input picker-value">{{form.visitTime || '请选择时间'}}</view>
+        </picker>
+      </view>
+      <view class="form-group">
+        <text class="form-label">来访目的 *</text>
+        <input class="form-input" placeholder="请输入来访目的" value="{{form.purpose}}" data-field="purpose" bindinput="onInput" />
+      </view>
+    </view>
+    <button class="btn btn-primary" bindtap="generateCode">生成邀请码</button>
+  </block>
+
+  <block wx:if="{{showResult}}">
+    <view class="card result-card">
+      <view class="result-title">邀请码已生成</view>
+      <view class="result-code">{{inviteCode}}</view>
+      <view class="result-tip">请将此邀请码告知访客</view>
+      <view class="result-info">
+        <text>日期：{{form.visitDate}} {{form.visitTime}}</text>
+      </view>
+      <view class="result-info">
+        <text>目的：{{form.purpose}}</text>
+      </view>
+    </view>
+    <button class="btn btn-outline" bindtap="copyCode">复制邀请码</button>
+    <button class="btn btn-default mt-2" bindtap="reset">再生成一个</button>
+    <button class="btn btn-default mt-2" bindtap="goBack">返回</button>
+  </block>
+</view>

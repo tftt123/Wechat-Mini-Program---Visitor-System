@@ -1,47 +1,77 @@
+/* 被访人信息卡片 */
 .info-card {
-  background: linear-gradient(135deg, #1976d2, #42a5f5);
-  color: #fff;
+  background: #FFFFFF;
+  color: #171717;
+  border-radius: 24rpx;
+  padding: 40rpx;
+  margin-bottom: 32rpx;
+  border: 1rpx solid #E5E5E5;
 }
 
 .info-title {
   font-size: 32rpx;
   font-weight: 600;
-  margin-bottom: 20rpx;
+  margin-bottom: 24rpx;
+  opacity: 0.9;
 }
 
 .info-row {
   display: flex;
-  margin-bottom: 12rpx;
+  margin-bottom: 16rpx;
   font-size: 28rpx;
 }
 
+.info-row:last-child {
+  margin-bottom: 0;
+}
+
 .info-label {
-  opacity: 0.9;
+  opacity: 0.7;
   width: 140rpx;
+  flex-shrink: 0;
 }
 
 .info-value {
   font-weight: 500;
 }
 
+/* 表单卡片 */
 .form-card {
-  margin-top: 20rpx;
+  background: #fff;
+  border-radius: 24rpx;
+  padding: 40rpx;
+  margin-bottom: 32rpx;
+  border: 1rpx solid #E2E8F0;
+  box-shadow: 0 2rpx 12rpx rgba(0,0,0,0.04);
 }
 
 .form-title {
   font-size: 32rpx;
   font-weight: 600;
-  margin-bottom: 30rpx;
-  color: #333;
+  margin-bottom: 32rpx;
+  color: #1E293B;
 }
 
 .picker-value {
   display: flex;
   align-items: center;
-  color: #333;
+  height: 96rpx;
+  color: #1E293B;
 }
 
-.picker-value:empty,
-.picker-value:only-child {
-  color: #999;
+.picker-value.placeholder {
+  color: #94A3B8;
+}
+
+.submit-btn {
+  background: #C62828;
+  color: #fff;
+  border-radius: 16rpx;
+  font-weight: 600;
+  font-size: 32rpx;
+}
+
+.submit-btn:disabled {
+  background: #E2E8F0 !important;
+  color: #94A3B8 !important;
 }

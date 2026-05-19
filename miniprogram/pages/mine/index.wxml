@@ -1,14 +1,18 @@
 <view class="mine-page">
   <view class="header-section">
-    <view class="avatar">
-      <text class="avatar-text">{{userInfo ? userInfo.name[0] : '访'}}</text>
-    </view>
+    <image class="logo-img" src="/images/SPINDEX_HRZ_FA.png" mode="aspectFit" />
     <view class="user-name">{{userInfo ? userInfo.name : '访客'}}</view>
     <view class="user-role" wx:if="{{userInfo}}">{{roleText}} · {{userInfo.phone}}</view>
     <view class="user-role" wx:else>未登录</view>
   </view>
 
   <view class="card menu-card" wx:if="{{isLoggedIn}}">
+    <view class="menu-item" bindtap="goToCreateInvite" wx:if="{{userInfo.role !== 'security'}}">
+      <text class="menu-icon">📋</text>
+      <text class="menu-text">发起邀请</text>
+      <text class="menu-arrow">›</text>
+    </view>
+    <view class="divider" wx:if="{{userInfo.role !== 'security'}}"></view>
     <view class="menu-item" bindtap="logout">
       <text class="menu-icon">🚪</text>
       <text class="menu-text">退出登录</text>
@@ -61,8 +65,8 @@
       </view>
       <view class="form-group">
         <text class="form-label">角色</text>
-        <picker value="{{['employee','hr','security'].indexOf(regForm.role)}}" range="{{['员工','人事','门卫']}}" bindchange="onRoleChange">
-          <view class="form-input picker-value">{{regForm.role === 'employee' ? '员工' : regForm.role === 'hr' ? '人事' : '门卫'}}</view>
+        <picker value="{{['employee','hr','security','it'].indexOf(regForm.role)}}" range="{{['员工','人事','门卫','IT']}}" bindchange="onRoleChange">
+          <view class="form-input picker-value">{{regForm.role === 'employee' ? '员工' : regForm.role === 'hr' ? '人事' : regForm.role === 'it' ? 'IT' : '门卫'}}</view>
         </picker>
       </view>
       <view class="form-group">

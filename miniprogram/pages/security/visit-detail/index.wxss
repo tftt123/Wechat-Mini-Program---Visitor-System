@@ -1,46 +1,62 @@
 .detail-card {
-  margin-bottom: 30rpx;
+  margin-bottom: 32rpx;
 }
 
 .detail-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 30rpx;
-  padding-bottom: 20rpx;
-  border-bottom: 1rpx solid #f5f5f5;
+  margin-bottom: 32rpx;
+  padding-bottom: 24rpx;
+  border-bottom: 1rpx solid #F5F5F5;
 }
 
 .detail-title {
   font-size: 36rpx;
-  font-weight: 600;
+  font-weight: 700;
+  color: #171717;
 }
 
 .detail-section {
-  margin-bottom: 30rpx;
+  margin-bottom: 32rpx;
+  padding-bottom: 24rpx;
+  border-bottom: 1rpx solid #F5F5F5;
+}
+
+.detail-section:last-child {
+  margin-bottom: 0;
+  padding-bottom: 0;
+  border-bottom: none;
 }
 
 .section-title {
   font-size: 28rpx;
   font-weight: 600;
-  color: #1976d2;
-  margin-bottom: 16rpx;
+  color: #171717;
+  margin-bottom: 20rpx;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .detail-row {
   display: flex;
   justify-content: space-between;
-  padding: 12rpx 0;
+  padding: 16rpx 0;
   font-size: 28rpx;
-  border-bottom: 1rpx solid #f8f8f8;
+  border-bottom: 1rpx solid #F5F5F5;
+}
+
+.detail-row:last-child {
+  border-bottom: none;
 }
 
 .row-label {
-  color: #999;
+  color: #737373;
 }
 
 .row-value {
-  color: #333;
+  color: #171717;
   font-weight: 500;
 }
 
@@ -48,15 +64,19 @@
 .edit-row {
   display: flex;
   align-items: center;
-  padding: 12rpx 0;
-  border-bottom: 1rpx solid #f8f8f8;
+  padding: 16rpx 0;
+  border-bottom: 1rpx solid #F5F5F5;
+}
+
+.edit-row:last-child {
+  border-bottom: none;
 }
 
 .escort-input {
   flex: 1;
   text-align: right;
   font-size: 28rpx;
-  color: #333;
+  color: #171717;
   height: 60rpx;
   margin-left: 20rpx;
 }
@@ -92,8 +112,9 @@
 .photo-preview-item {
   width: 140rpx;
   height: 140rpx;
-  border-radius: 12rpx;
+  border-radius: 16rpx;
   overflow: hidden;
+  border: 1rpx solid #E5E5E5;
 }
 
 .photo-preview-item image {
@@ -113,34 +134,37 @@
   position: fixed;
   top: 50%; left: 50%;
   transform: translate(-50%, -50%);
-  width: 80%; max-width: 600rpx;
+  width: 80%; max-width: 640rpx;
   background: #fff;
-  border-radius: 16rpx;
+  border-radius: 24rpx;
   z-index: 101;
   overflow: hidden;
+  box-shadow: 0 8rpx 32rpx rgba(0,0,0,0.12);
 }
 
 .modal-title {
   font-size: 32rpx;
   font-weight: 600;
   text-align: center;
-  padding: 30rpx;
-  border-bottom: 1rpx solid #eee;
+  padding: 32rpx;
+  border-bottom: 1rpx solid #F5F5F5;
+  color: #171717;
 }
 
 .modal-body {
-  padding: 30rpx;
+  padding: 32rpx;
 }
 
 .modal-tip {
   font-size: 28rpx;
-  color: #666;
-  margin-bottom: 30rpx;
+  color: #737373;
+  margin-bottom: 32rpx;
 }
 
 .modal-footer {
   display: flex;
-  padding: 20rpx 30rpx 30rpx;
+  padding: 24rpx 32rpx 32rpx;
+  gap: 20rpx;
 }
 
 /* 单选 */
@@ -151,18 +175,20 @@
 
 .radio-item {
   flex: 1;
-  height: 80rpx;
-  line-height: 80rpx;
+  height: 88rpx;
+  line-height: 88rpx;
   text-align: center;
-  border-radius: 12rpx;
-  border: 2rpx solid #e0e0e0;
+  border-radius: 16rpx;
+  border: 2rpx solid #E5E5E5;
   font-size: 28rpx;
-  color: #666;
+  color: #737373;
+  background: #F5F5F5;
+  transition: all 0.2s;
 }
 
 .radio-active {
-  border-color: #1976d2;
-  background: #e3f2fd;
-  color: #1976d2;
+  border-color: #171717;
+  background: #E5E5E5;
+  color: #171717;
   font-weight: 600;
 }

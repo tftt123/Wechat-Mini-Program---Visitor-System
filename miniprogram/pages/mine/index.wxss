@@ -1,58 +1,62 @@
 .mine-page {
   min-height: 100vh;
-  background: #f5f5f5;
+  background: #F5F7FA;
 }
 
 .header-section {
-  background: linear-gradient(135deg, #1976d2, #42a5f5);
-  padding: 80rpx 40rpx 60rpx;
+  background: #FFFFFF;
+  padding: 60rpx 40rpx 60rpx;
   text-align: center;
-  color: #fff;
+  border-radius: 40rpx;
+  margin: 16rpx;
+  border: 1rpx solid #E5E5E5;
 }
 
-.avatar {
-  width: 120rpx;
-  height: 120rpx;
-  background: rgba(255,255,255,0.3);
-  border-radius: 50%;
-  margin: 0 auto 24rpx;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.avatar-text {
-  font-size: 48rpx;
-  font-weight: 600;
+.logo-img {
+  width: 320rpx;
+  height: 80rpx;
+  margin: 0 auto 32rpx;
+  display: block;
 }
 
 .user-name {
   font-size: 40rpx;
   font-weight: 600;
   margin-bottom: 12rpx;
+  color: #171717;
 }
 
 .user-role {
   font-size: 28rpx;
-  opacity: 0.9;
+  color: #737373;
+  font-weight: 400;
 }
 
 .menu-card {
-  margin: 30rpx;
+  margin: 32rpx;
   padding: 0;
   overflow: hidden;
+  background: #fff;
+  border-radius: 20rpx;
+  border: 1rpx solid #E2E8F0;
+  box-shadow: 0 2rpx 8rpx rgba(0,0,0,0.04);
 }
 
 .menu-item {
   display: flex;
   align-items: center;
-  padding: 30rpx;
+  padding: 32rpx;
   background: #fff;
+  border-bottom: 1rpx solid #F1F5F9;
+}
+
+.menu-item:last-child {
+  border-bottom: none;
 }
 
 .menu-icon {
   font-size: 40rpx;
-  margin-right: 20rpx;
+  margin-right: 24rpx;
   width: 60rpx;
   text-align: center;
 }
@@ -60,12 +64,13 @@
 .menu-text {
   flex: 1;
   font-size: 30rpx;
-  color: #333;
+  color: #1E293B;
+  font-weight: 500;
 }
 
 .menu-arrow {
   font-size: 36rpx;
-  color: #ccc;
+  color: #CBD5E1;
 }
 
 /* 弹窗 */
@@ -85,23 +90,27 @@
   left: 50%;
   transform: translate(-50%, -50%);
   width: 80%;
+  max-width: 600rpx;
   background: #fff;
-  border-radius: 20rpx;
+  border-radius: 24rpx;
   z-index: 101;
-  padding: 40rpx;
+  padding: 48rpx;
+  box-shadow: 0 8rpx 32rpx rgba(0,0,0,0.12);
 }
 
 .modal-title {
   font-size: 36rpx;
   font-weight: 600;
   text-align: center;
-  margin-bottom: 30rpx;
+  margin-bottom: 32rpx;
+  color: #1E293B;
 }
 
 .modal-body {
-  margin-bottom: 30rpx;
+  margin-bottom: 32rpx;
 }
 
 .modal-footer {
   display: flex;
+  gap: 20rpx;
 }

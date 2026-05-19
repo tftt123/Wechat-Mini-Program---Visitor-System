@@ -47,7 +47,8 @@ function getStatusInfo(status) {
 const ROLE_MAP = {
   'employee': '员工',
   'hr': '人事',
-  'security': '门卫'
+  'security': '门卫',
+  'it': 'IT'
 }
 
 function getRoleText(role) {

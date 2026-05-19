@@ -52,7 +52,7 @@ Page({
   },
 
   onRoleChange(e) {
-    const roles = ['employee', 'hr', 'security']
+    const roles = ['employee', 'hr', 'security', 'it']
     this.setData({ 'regForm.role': roles[e.detail.value] })
   },
 
@@ -118,6 +118,10 @@ Page({
       wx.hideLoading()
       showToast('注册失败')
     }
+  },
+
+  goToCreateInvite() {
+    wx.navigateTo({ url: '/pages/create-invite/index' })
   },
 
   // 退出登录

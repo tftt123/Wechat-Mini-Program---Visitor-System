@@ -1,5 +1,6 @@
 const api = require('../../../services/api')
 const { getStatusInfo, showToast, formatDateTime } = require('../../../utils/util')
+const app = getApp()
 
 Page({
   data: {
@@ -8,6 +9,10 @@ Page({
   },
 
   async onLoad(options) {
+    if (!app.checkPagePermission('pages/hr/visit-detail/index')) {
+      wx.navigateBack()
+      return
+    }
     if (!options.id) {
       showToast('拜访ID缺失')
       wx.navigateBack()

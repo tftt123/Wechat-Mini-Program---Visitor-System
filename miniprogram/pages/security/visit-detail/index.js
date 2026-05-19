@@ -16,6 +16,10 @@ Page({
   },
 
   async onLoad(options) {
+    if (!app.checkPagePermission('pages/security/visit-detail/index')) {
+      wx.navigateBack()
+      return
+    }
     if (!options.id) {
       showToast('拜访ID缺失')
       wx.navigateBack()

@@ -1,5 +1,10 @@
 const api = require('../../../services/api')
 const { getStatusInfo, showToast, getToday } = require('../../../utils/util')
+
+function getCurrentMonth() {
+  const d = new Date()
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`
+}
 const app = getApp()
 
 Page({
@@ -12,13 +17,20 @@ Page({
     },
     pendingList: [],
     todayList: [],
-    currentTab: 'pending'
+    allList: [],
+    currentTab: 'pending',
+    currentMonth: getCurrentMonth(),
+    allRawData: []
   },
 
   onShow() {
     const userInfo = app.globalData.userInfo
     if (!userInfo) {
-      wx.redirectTo({ url: '/pages/mine/index' })
+      wx.switchTab({ url: '/pages/mine/index' })
+      return
+    }
+    if (!app.checkPagePermission('pages/employee/index/index')) {
+      wx.switchTab({ url: '/pages/mine/index' })
       return
     }
     this.setData({ userInfo })
@@ -36,8 +48,10 @@ Page({
       if (res.code === 0) {
         const all = res.data
         const today = getToday()
+        const { currentMonth } = this.data
         const pending = all.filter(v => v.status === 'pending' || v.status === 'awaiting_visitor')
         const todayList = all.filter(v => v.visitDate === today && !['checked_out', 'cancelled'].includes(v.status))
+        const monthList = all.filter(v => v.status !== 'cancelled' && v.visitDate && v.visitDate.startsWith(currentMonth))
 
         this.setData({
           stats: {
@@ -46,7 +60,9 @@ Page({
             total: all.length
           },
           pendingList: pending.map(v => ({ ...v, statusInfo: getStatusInfo(v.status) })),
-          todayList: todayList.map(v => ({ ...v, statusInfo: getStatusInfo(v.status) }))
+          todayList: todayList.map(v => ({ ...v, statusInfo: getStatusInfo(v.status) })),
+          allList: monthList.map(v => ({ ...v, statusInfo: getStatusInfo(v.status) })),
+          allRawData: all
         })
       }
     } catch (err) {
@@ -60,8 +76,14 @@ Page({
     this.setData({ currentTab: tab })
   },
 
-  goToInviteCode() {
-    wx.navigateTo({ url: '/pages/employee/invite-code/index' })
+  onMonthChange(e) {
+    const month = e.detail.value
+    const { allRawData } = this.data
+    const monthList = allRawData.filter(v => v.status !== 'cancelled' && v.visitDate && v.visitDate.startsWith(month))
+    this.setData({
+      currentMonth: month,
+      allList: monthList.map(v => ({ ...v, statusInfo: getStatusInfo(v.status) }))
+    })
   },
 
   goToDetail(e) {

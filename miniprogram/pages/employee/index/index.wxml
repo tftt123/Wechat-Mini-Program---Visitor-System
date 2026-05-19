@@ -15,11 +15,6 @@
     </view>
   </view>
 
-  <!-- 生成邀请码按钮 -->
-  <button class="btn btn-primary btn-generate" bindtap="goToInviteCode">
-    + 生成邀请码
-  </button>
-
   <!-- Tab切换 -->
   <view class="tab-bar">
     <view class="tab-item {{currentTab === 'pending' ? 'active' : ''}}" bindtap="switchTab" data-tab="pending">
@@ -28,6 +23,9 @@
     </view>
     <view class="tab-item {{currentTab === 'today' ? 'active' : ''}}" bindtap="switchTab" data-tab="today">
       今日来访
+    </view>
+    <view class="tab-item {{currentTab === 'all' ? 'active' : ''}}" bindtap="switchTab" data-tab="all">
+      全部记录
     </view>
   </view>
 
@@ -64,6 +62,31 @@
     </view>
     <view class="empty-state" wx:if="{{todayList.length === 0}}">
       <view class="empty-state-text">今日暂无来访</view>
+    </view>
+  </view>
+
+  <!-- 全部记录列表 -->
+  <view class="list" wx:if="{{currentTab === 'all'}}">
+    <view class="month-filter">
+      <picker mode="date" fields="year-month" value="{{currentMonth}}" bindchange="onMonthChange">
+        <view class="month-picker">
+          <text class="month-label">{{currentMonth}}</text>
+          <text class="month-arrow">▼</text>
+        </view>
+      </picker>
+    </view>
+    <view class="visit-item card" wx:for="{{allList}}" wx:key="visitId" bindtap="goToDetail" data-id="{{item.visitId}}">
+      <view class="item-header">
+        <text class="item-name">{{item.visitorName || '未填写姓名'}}</text>
+        <text class="status-tag {{item.statusInfo.class}}">{{item.statusInfo.text}}</text>
+      </view>
+      <view class="item-info">
+        <text>{{item.visitDate}} {{item.visitTime}}</text>
+      </view>
+      <view class="item-purpose" wx:if="{{item.purpose}}">目的：{{item.purpose}}</view>
+    </view>
+    <view class="empty-state" wx:if="{{allList.length === 0}}">
+      <view class="empty-state-text">暂无记录</view>
     </view>
   </view>
 </view>

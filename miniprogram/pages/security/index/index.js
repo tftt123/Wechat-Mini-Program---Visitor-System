@@ -15,7 +15,11 @@ Page({
   onShow() {
     const userInfo = app.globalData.userInfo
     if (!userInfo) {
-      wx.redirectTo({ url: '/pages/mine/index' })
+      wx.switchTab({ url: '/pages/mine/index' })
+      return
+    }
+    if (!app.checkPagePermission('pages/security/index/index')) {
+      wx.switchTab({ url: '/pages/mine/index' })
       return
     }
     this.setData({ userInfo })

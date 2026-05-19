@@ -3,6 +3,7 @@
     "pages/index/index",
     "pages/visitor-form/index",
     "pages/employee/index/index",
+    "pages/create-invite/index",
     "pages/employee/invite-code/index",
     "pages/employee/visit-detail/index",
     "pages/security/index/index",
@@ -13,14 +14,14 @@
   ],
   "window": {
     "backgroundTextStyle": "dark",
-    "navigationBarBackgroundColor": "#1976d2",
+    "navigationBarBackgroundColor": "#FFFFFF",
     "navigationBarTitleText": "访客管理系统",
-    "navigationBarTextStyle": "white",
-    "backgroundColor": "#f5f5f5"
+    "navigationBarTextStyle": "black",
+    "backgroundColor": "#F5F5F5"
   },
   "tabBar": {
     "color": "#999999",
-    "selectedColor": "#1976d2",
+    "selectedColor": "#1A2A3A",
     "backgroundColor": "#ffffff",
     "borderStyle": "black",
     "list": [

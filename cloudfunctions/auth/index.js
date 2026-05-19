@@ -36,7 +36,7 @@ async function register(phone, name, role, department) {
   if (!name || name.trim() === '') {
     return { code: -1, msg: '姓名不能为空' }
   }
-  if (!role || !['employee', 'hr', 'security'].includes(role)) {
+  if (!role || !['employee', 'hr', 'security', 'it'].includes(role)) {
     return { code: -1, msg: '角色类型不正确' }
   }
 

@@ -1,5 +1,5 @@
-const api = require('../../../services/api')
-const { showToast, getToday } = require('../../../utils/util')
+const api = require('../../services/api')
+const { showToast, getToday } = require('../../utils/util')
 const app = getApp()
 
 Page({
@@ -19,7 +19,7 @@ Page({
   },
 
   onLoad() {
-    if (!app.checkPagePermission('pages/employee/invite-code/index')) {
+    if (!app.checkPagePermission('pages/create-invite/index')) {
       wx.navigateBack()
     }
   },
@@ -66,22 +66,17 @@ Page({
     }
   },
 
-  // 复制邀请码
   copyCode() {
     wx.setClipboardData({
       data: this.data.inviteCode,
-      success: () => {
-        showToast('已复制')
-      }
+      success: () => { showToast('已复制') }
     })
   },
 
-  // 返回首页
   goBack() {
     wx.navigateBack()
   },
 
-  // 再生成一个
   reset() {
     this.setData({
       inviteCode: '',
